@@ -47,11 +47,16 @@ final readonly class InstallCommand
         }
 
         $io->comment(sprintf('Installing %s...', $name));
-        $fileUrl = $registry['path'].$registry['namespace'][$element];
-        $targetFile = $this->projectDir.DIRECTORY_SEPARATOR.$targetDir.DIRECTORY_SEPARATOR.$registry['namespace'][$element];
-        $this->filesystem->copy($fileUrl, $targetFile, true);
+        $basePath = $registry['path'];
+        $installed = [];
+        foreach ($registry['namespace'][$element] as $path) {
+            $fileUrl = $basePath.$path;
+            $targetFile = $this->projectDir.DIRECTORY_SEPARATOR.$targetDir.DIRECTORY_SEPARATOR.$path;
+            $this->filesystem->copy($fileUrl, $targetFile, true);
+            $installed[] = $targetFile;
+        }
 
-        $io->success(sprintf('"%s" installed to "%s".', $name, $targetFile));
+        $io->success(sprintf('"%s" installed to:%s', $name, "\n - ".implode("\n - ", $installed)));
 
         return 0;
     }
