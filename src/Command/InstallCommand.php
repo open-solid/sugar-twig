@@ -30,8 +30,15 @@ final readonly class InstallCommand
 
     public function __invoke(SymfonyStyle $io, #[Argument] string $name, #[Argument] string $targetDir = 'templates'): int
     {
-        [$collection, $element] = explode('/', $name);
-        $io->comment(\sprintf('Fetching %s registry...', $collection));
+        $parts = explode('/', $name);
+        if (2 !== \count($parts)) {
+            $io->error(sprintf('Invalid name "%s". Expected format: collection/element (e.g. shadcn/button).', $name));
+
+            return 1;
+        }
+
+        [$collection, $element] = $parts;
+        $io->comment(sprintf('Fetching %s registry...', $collection));
         $registryUrl = sprintf(self::COLLECTION_URL, $collection);
 
         $registry = json_decode(file_get_contents($registryUrl), true);
