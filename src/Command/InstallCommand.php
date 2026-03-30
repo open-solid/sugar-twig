@@ -48,19 +48,20 @@ final readonly class InstallCommand
             [$collection, $element] = $parts;
 
             if (!isset($registries[$collection])) {
-                $io->comment(sprintf('Fetching %s registry...', $collection));
+                $io->write(sprintf("\r\033[2KFetching %s registry...", $collection));
                 $registryUrl = sprintf($this->collectionUrl, $collection);
                 $registries[$collection] = json_decode(file_get_contents($registryUrl), true);
             }
 
             $registry = $registries[$collection];
             if (!isset($registry['namespace'][$element])) {
+                $io->writeln('');
                 $io->error(sprintf('Element "%s" not found in the "%s" collection registry.', $element, $collection));
 
                 return 1;
             }
 
-            $io->comment(sprintf('Installing %s...', $name));
+            $io->write(sprintf("\r\033[2KInstalling %s...", $name));
             foreach ($registry['namespace'][$element] as $path) {
                 $fileUrl = $registry['path'].$path;
                 $targetFile = $this->projectDir.DIRECTORY_SEPARATOR.$targetDir.DIRECTORY_SEPARATOR.$path;
@@ -69,6 +70,7 @@ final readonly class InstallCommand
             }
         }
 
+        $io->write("\r\033[2K");
         $io->success(sprintf('Installed to:%s', "\n - ".implode("\n - ", $installed)));
 
         return 0;
