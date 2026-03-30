@@ -6,9 +6,11 @@ namespace OpenSolid\SugarTwig\Tests\Extension;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use TalesFromADev\Twig\Extra\Tailwind\TailwindRuntime;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
+use Twig\TwigFilter;
 use OpenSolid\SugarTwig\Extension\HtmlAttrsExtension;
 use OpenSolid\SugarTwig\Extension\HtmlAttrsRuntime;
 
@@ -176,6 +178,16 @@ final class HtmlAttrsRuntimeTest extends TestCase
         $result = $this->runtime->render($this->env, $context, ['role' => 'dialog'], ['title']);
 
         self::assertSame('id="main" role="dialog"', $result);
+    }
+
+    #[Test]
+    public function it_calls_tailwind_merge_filter_when_registered(): void
+    {
+        $this->env->addFilter(new TwigFilter('tailwind_merge', new TailwindRuntime()->merge(...)));
+
+        $result = $this->runtime->render($this->env, context: ['className' => 'p-8'], defaults: ['class' => 'p-4 bg-primary']);
+
+        self::assertSame('class="bg-primary p-8"', $result);
     }
 
     #[Test]

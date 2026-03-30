@@ -7,11 +7,11 @@
     "require": {
         "php": ">=8.4",
         "symfony/twig-bundle": "^6.4|^7.4|^8.0",
-        "tales-from-a-dev/twig-tailwind-extra": "^1.1",
         "twig/extra-bundle": "^3.24",
         "twig/html-extra": "^3.24"
     },
     "require-dev": {
+        "tales-from-a-dev/twig-tailwind-extra": "^1.1",
         "phpunit/phpunit": "^13.0"
     },
     "autoload": {
