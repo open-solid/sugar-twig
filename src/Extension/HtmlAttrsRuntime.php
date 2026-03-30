@@ -50,7 +50,7 @@ final readonly class HtmlAttrsRuntime implements RuntimeExtensionInterface
 
         $attrs = [];
         foreach ($context + $defaults as $key => $value) {
-            if (isset($excluded[$key])) {
+            if (isset($excluded[$key]) || !is_scalar($value)) {
                 continue;
             }
 
