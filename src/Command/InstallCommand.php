@@ -25,6 +25,7 @@ final readonly class InstallCommand
     public function __construct(
         private string $projectDir,
         private Filesystem $filesystem = new Filesystem(),
+        private string $collectionUrl = self::COLLECTION_URL,
     ) {
     }
 
@@ -48,7 +49,7 @@ final readonly class InstallCommand
 
             if (!isset($registries[$collection])) {
                 $io->comment(sprintf('Fetching %s registry...', $collection));
-                $registryUrl = sprintf(self::COLLECTION_URL, $collection);
+                $registryUrl = sprintf($this->collectionUrl, $collection);
                 $registries[$collection] = json_decode(file_get_contents($registryUrl), true);
             }
 
