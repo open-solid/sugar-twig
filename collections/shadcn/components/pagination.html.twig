@@ -8,12 +8,12 @@
         current  - Current page number
         total    - Total number of pages
         href     - URL pattern with {page} placeholder (e.g. '/items?page={page}')
-        class    - Additional CSS classes
+        className - Additional CSS classes
 #}
 {%- set current = current|default(1) -%}
 {%- set total = total|default(1) -%}
 
-<nav role="navigation" aria-label="pagination" class="mx-auto flex w-full justify-center {{ class|default('') }}" {{ html_attrs(exclude=['href']) }}>
+<nav role="navigation" aria-label="pagination" {{ html_attrs({class: 'mx-auto flex w-full justify-center'}, exclude=['current', 'href', 'total']) }}>
     <ul class="flex flex-row items-center gap-1">
         {# Previous #}
         <li>

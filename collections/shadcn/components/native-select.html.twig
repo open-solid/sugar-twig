@@ -13,13 +13,12 @@
         id          - Select id
         placeholder - Placeholder option text
         options     - Array of {value, label, selected?}
-        class       - Additional CSS classes
+        className   - Additional CSS classes
 #}
 <select
     {% if name is defined %}name="{{ name }}"{% endif %}
     {% if id is defined %}id="{{ id }}"{% endif %}
-    class="flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 {{ class|default('') }}"
-    {{ html_attrs(exclude=['id', 'name', 'placeholder']) }}
+    {{ html_attrs({class: 'flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50'}, exclude=['id', 'name', 'placeholder']) }}
 >
     {%- if placeholder is defined -%}
     <option value="" disabled selected>{{ placeholder }}</option>

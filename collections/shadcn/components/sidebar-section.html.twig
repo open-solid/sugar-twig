@@ -9,9 +9,9 @@
 
     Parameters:
         title - Section title
-        class - Additional CSS classes
+        className - Additional CSS classes
 #}
-<div class="py-2 {{ class|default('') }}">
+<div {{ html_attrs({class: 'py-2'}, exclude=['title']) }}>
     {%- if title is defined -%}
     <h4 class="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/50">{{ title }}</h4>
     {%- endif -%}

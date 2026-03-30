@@ -3,16 +3,16 @@
 
     Usage:
         <Separator />
-        <Separator orientation="vertical" class="h-6" />
+        <Separator orientation="vertical" className="h-6" />
 
     Parameters:
         orientation - horizontal|vertical (default: 'horizontal')
-        class       - Additional CSS classes
+        className   - Additional CSS classes
 #}
 {%- set orientation = orientation|default('horizontal') -%}
 
 {%- if orientation == 'horizontal' -%}
-<div role="separator" class="shrink-0 bg-border h-px w-full {{ class|default('') }}" {{ html_attrs() }}></div>
+<div role="separator" {{ html_attrs({class: 'shrink-0 bg-border h-px w-full'}, exclude=['orientation']) }}></div>
 {%- else -%}
-<div role="separator" class="shrink-0 bg-border w-px h-full {{ class|default('') }}" {{ html_attrs() }}></div>
+<div role="separator" {{ html_attrs({class: 'shrink-0 bg-border w-px h-full'}, exclude=['orientation']) }}></div>
 {%- endif -%}

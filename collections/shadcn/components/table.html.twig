@@ -18,10 +18,10 @@
         </Table>
 
     Parameters:
-        class - Additional CSS classes
+        className - Additional CSS classes
 #}
 <div class="relative w-full overflow-auto">
-    <table class="w-full caption-bottom text-sm {{ class|default('') }}" {{ html_attrs() }}>
+    <table {{ html_attrs({class: 'w-full caption-bottom text-sm'}) }}>
         {%- block content %}{% endblock -%}
     </table>
 </div>

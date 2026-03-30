@@ -8,8 +8,8 @@
         With variant:      @click="$dispatch('toast', { title: 'Error', variant: 'destructive' })"
 
     Parameters:
-        position - top-right|top-left|bottom-right|bottom-left (default: 'bottom-right')
-        class    - Additional CSS classes
+        position  - top-right|top-left|bottom-right|bottom-left (default: 'bottom-right')
+        className - Additional CSS classes
 #}
 {%- set container = html_cva(
     base: 'fixed z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:flex-col sm:max-w-[420px]',
@@ -25,7 +25,7 @@
 ) -%}
 
 <div
-    class="{{ container.apply({position: position|default(null)}, class|default(null))|tailwind_merge }}"
+    {{ html_attrs({class: container.apply({position: position|default(null)})}, exclude=['position']) }}
     x-data="{
         toasts: [],
         add(detail) {

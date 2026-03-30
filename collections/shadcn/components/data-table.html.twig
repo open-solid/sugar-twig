@@ -19,13 +19,13 @@
         order   - asc|desc (default: 'asc')
         href    - URL pattern with {sort} and {order} placeholders for sorting links
         empty   - Empty state message (default: 'No results.')
-        class   - Additional CSS classes
+        className - Additional CSS classes
 #}
 {%- set sort = sort|default('') -%}
 {%- set order = order|default('asc') -%}
 {%- set empty_message = empty|default('No results.') -%}
 
-<div class="rounded-md border {{ class|default('') }}" {{ html_attrs(exclude=['href', 'rows']) }}>
+<div {{ html_attrs({class: 'rounded-md border'}, exclude=['columns', 'empty', 'href', 'order', 'rows', 'sort']) }}>
     <div class="relative w-full overflow-auto">
         <table class="w-full caption-bottom text-sm">
             <thead class="[&_tr]:border-b">

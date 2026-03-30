@@ -5,9 +5,9 @@
         <DropdownMenuLabel content="My Account" />
 
     Parameters:
-        content - Label text
-        class   - Additional CSS classes
+        content   - Label text
+        className - Additional CSS classes
 #}
-<div class="px-2 py-1.5 text-sm font-semibold {{ class|default('') }}">
+<div {{ html_attrs({class: 'px-2 py-1.5 text-sm font-semibold'}, exclude=['content']) }}>
     {{- content|default('')|raw -}}
 </div>

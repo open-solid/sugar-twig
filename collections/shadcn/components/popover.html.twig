@@ -15,9 +15,9 @@
         </Popover>
 
     Parameters:
-        side  - top|bottom|left|right (default: 'bottom')
-        align - start|center|end (default: 'center')
-        class - Additional CSS classes
+        side      - top|bottom|left|right (default: 'bottom')
+        align     - start|center|end (default: 'center')
+        className - Additional CSS classes
 #}
 {%- set panel = html_cva(
     base: 'absolute z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none',
@@ -37,7 +37,7 @@
     defaultVariant: { side: 'bottom', align: 'center' },
 ) -%}
 
-<div class="{{ ['relative inline-block', class|default('')]|tailwind_merge }}" x-data="{ open: false }" {{ html_attrs() }}>
+<div x-data="{ open: false }" {{ html_attrs({class: 'relative inline-block'}, exclude=['align', 'side']) }}>
     <div @click="open = !open">
         {% block trigger %}{% endblock %}
     </div>
@@ -47,7 +47,7 @@
         x-transition
         @click.outside="open = false"
         @keydown.escape.window="open = false"
-        class="{{ panel.apply({side: side|default(null), align: align|default(null)})|tailwind_merge }}"
+        class="{{ panel.apply({side: side|default(null), align: align|default(null)}) }}"
     >
         {% block body %}{% endblock %}
     </div>

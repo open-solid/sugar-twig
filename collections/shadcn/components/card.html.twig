@@ -16,9 +16,9 @@
         </Card>
 
     Parameters:
-        size  - sm (optional, adjusts spacing/text)
-        class - Additional CSS classes
+        size      - sm (optional, adjusts spacing/text)
+        className - Additional CSS classes
 #}
-<div data-slot="card"{% if size is defined %} data-size="{{ size }}"{% endif %} class="{{ ['group/card flex flex-col gap-4 overflow-hidden rounded-xl bg-card py-4 text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl', class|default('')]|tailwind_merge }}" {{ html_attrs(exclude=['size']) }}>
+<div data-slot="card"{% if size is defined %} data-size="{{ size }}"{% endif %} {{ html_attrs({class: 'group/card flex flex-col gap-4 overflow-hidden rounded-xl bg-card py-4 text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl'}, exclude=['size']) }}>
     {%- block content %}{% endblock -%}
 </div>

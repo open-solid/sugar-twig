@@ -17,8 +17,8 @@
         </Alert>
 
     Parameters:
-        variant     - default|destructive (default: 'default')
-        class       - Additional CSS classes
+        variant   - default|destructive (default: 'default')
+        className - Additional CSS classes
 
     Blocks:
         icon        - SVG icon markup
@@ -39,7 +39,7 @@
     },
 ) -%}
 
-<div data-slot="alert" role="alert" class="{{ alert.apply({variant: variant|default(null)}, class|default(null))|tailwind_merge }}" {{ html_attrs() }}>
+<div data-slot="alert" role="alert" {{ html_attrs({class: alert.apply({variant: variant|default(null)})}, exclude=['variant']) }}>
     {%- if block('icon') is not empty -%}
         {%- block icon %}{% endblock -%}
     {%- endif -%}

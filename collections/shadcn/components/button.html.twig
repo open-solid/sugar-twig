@@ -7,7 +7,7 @@
         <Button variant="outline" size="icon">
             <svg>...</svg>
         </Button>
-        <Button variant="outline" size="icon" class="rounded-full">
+        <Button variant="outline" size="icon" className="rounded-full">
             <svg>...</svg>
         </Button>
         <Button variant="secondary">Secondary</Button>
@@ -22,10 +22,10 @@
         </Button>
 
     Parameters:
-        variant  - default|destructive|outline|secondary|ghost|link (default: 'default')
-        size     - default|xs|sm|lg|icon|icon-xs|icon-sm|icon-lg (default: 'default')
-        as       - HTML tag to render (default: 'button')
-        class    - Additional CSS classes
+        as         - HTML tag to render (default: 'button')
+        variant    - default|destructive|outline|secondary|ghost|link (default: 'default')
+        size       - default|xs|sm|lg|icon|icon-xs|icon-sm|icon-lg (default: 'default')
+        className  - Additional CSS classes
 #}
 {%- set as = as|default('button') -%}
 
@@ -57,6 +57,6 @@
     },
 ) -%}
 
-<{{ as }} class="{{ button.apply({variant: variant|default(null), size: size|default(null)}, class|default(null))|tailwind_merge }}" {{ html_attrs(exclude=['as', 'variant', 'size', 'class']) }}>
+<{{ as }} {{ html_attrs({class: button.apply({variant: variant|default(null), size: size|default(null)})}, exclude=['as', 'variant', 'size']) }}>
     {%- block content %}{% endblock -%}
 </{{ as }}>

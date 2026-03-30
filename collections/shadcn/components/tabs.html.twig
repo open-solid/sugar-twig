@@ -17,11 +17,11 @@
     Parameters:
         tabs    - Array of {value, label}
         default - Default active tab value (defaults to first tab)
-        class   - Additional CSS classes
+        className - Additional CSS classes
 #}
 {%- set default_tab = default|default(tabs[0].value) -%}
 
-<div x-data="{ tab: '{{ default_tab }}' }" class="{{ class|default('') }}" {{ html_attrs(exclude=['default']) }}>
+<div x-data="{ tab: '{{ default_tab }}' }" {{ html_attrs(exclude=['default', 'tabs']) }}>
     <div class="inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground" role="tablist">
         {%- for t in tabs -%}
         <button

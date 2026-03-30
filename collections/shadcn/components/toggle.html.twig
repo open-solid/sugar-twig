@@ -6,11 +6,11 @@
         <Toggle variant="outline" content="Italic" />
 
     Parameters:
-        variant - default|outline (default: 'default')
-        size    - default|sm|lg (default: 'default')
-        pressed - Initial pressed state (default: false)
-        content - Toggle label/icon
-        class   - Additional CSS classes
+        variant   - default|outline (default: 'default')
+        size      - default|sm|lg (default: 'default')
+        pressed   - Initial pressed state (default: false)
+        content   - Toggle label/icon
+        className - Additional CSS classes
 #}
 {%- set pressed = pressed|default(false) -%}
 
@@ -36,8 +36,7 @@
     @click="pressed = !pressed"
     :aria-pressed="pressed"
     :class="pressed ? 'bg-accent text-accent-foreground' : ''"
-    class="{{ component.apply({variant: variant|default(null), size: size|default(null)}, class|default(null))|tailwind_merge }}"
-    {{ html_attrs(exclude=['content', 'size']) }}
+    {{ html_attrs({class: component.apply({variant: variant|default(null), size: size|default(null)})}, exclude=['content', 'pressed', 'size', 'variant']) }}
 >
     {{- content|default('')|raw -}}
 </button>

@@ -13,9 +13,9 @@
         </HoverCard>
 
     Parameters:
-        side  - top|bottom (default: 'bottom')
-        align - start|center|end (default: 'center')
-        class - Additional CSS classes
+        side      - top|bottom (default: 'bottom')
+        align     - start|center|end (default: 'center')
+        className - Additional CSS classes
 #}
 {%- set panel = html_cva(
     base: 'absolute z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md',
@@ -34,18 +34,17 @@
 ) -%}
 
 <div
-    class="{{ ['relative inline-block', class|default('')]|tailwind_merge }}"
     x-data="{ show: false, timer: null }"
     @mouseenter="timer = setTimeout(() => show = true, 300)"
     @mouseleave="clearTimeout(timer); show = false"
-    {{ html_attrs() }}
+    {{ html_attrs({class: 'relative inline-block'}, exclude=['align', 'side']) }}
 >
     {% block trigger %}{% endblock %}
     <div
         x-show="show"
         x-cloak
         x-transition
-        class="{{ panel.apply({side: side|default(null), align: align|default(null)})|tailwind_merge }}"
+        class="{{ panel.apply({side: side|default(null), align: align|default(null)}) }}"
     >
         {% block body %}{% endblock %}
     </div>

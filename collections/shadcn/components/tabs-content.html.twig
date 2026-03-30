@@ -9,13 +9,13 @@
 
     Parameters:
         value - Tab value this panel corresponds to
-        class - Additional CSS classes
+        className - Additional CSS classes
 #}
 <div
     x-show="tab === '{{ value }}'"
     x-cloak
     role="tabpanel"
-    class="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 {{ class|default('') }}"
+    {{ html_attrs({class: 'mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'}, exclude=['value']) }}
 >
     {%- block content %}{% endblock -%}
 </div>

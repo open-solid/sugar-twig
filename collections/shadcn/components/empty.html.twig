@@ -13,9 +13,9 @@
         icon        - SVG icon HTML
         title       - Title text
         description - Description text
-        class       - Additional CSS classes
+        className   - Additional CSS classes
 #}
-<div class="flex flex-col items-center justify-center gap-4 py-12 text-center {{ class|default('') }}" {{ html_attrs(exclude=['title']) }}>
+<div {{ html_attrs({class: 'flex flex-col items-center justify-center gap-4 py-12 text-center'}, exclude=['icon', 'title']) }}>
     {%- if icon is defined -%}
     <div class="text-muted-foreground">{{ icon|raw }}</div>
     {%- endif -%}

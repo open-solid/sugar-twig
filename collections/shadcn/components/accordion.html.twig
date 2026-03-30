@@ -9,17 +9,13 @@
         ] }}" />
 
     Parameters:
-        items - Array of {value, trigger, content}
-        type  - single|multiple (default: 'single')
-        class - Additional CSS classes
+        items     - Array of {value, trigger, content}
+        type      - single|multiple (default: 'single')
+        className - Additional CSS classes
 #}
 {%- set type = type|default('single') -%}
 
-<div
-    x-data="{ active: {% if type == 'single' %}''{% else %}[]{% endif %} }"
-    class="divide-y divide-border {{ class|default('') }}"
-    {{ html_attrs(exclude=['type']) }}
->
+<div x-data="{ active: {{ type == 'single' ? '' : [] }}}" {{ html_attrs({class: 'divide-y divide-border'}, exclude=['items', 'type']) }}>
     {%- for item in items|default([]) -%}
     <div class="border-b">
         <h3 class="flex">

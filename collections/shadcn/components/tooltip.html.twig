@@ -9,9 +9,9 @@
         </Tooltip>
 
     Parameters:
-        text  - Tooltip text
-        side  - top|bottom|left|right (default: 'top')
-        class - Additional CSS classes
+        text      - Tooltip text
+        side      - top|bottom|left|right (default: 'top')
+        className - Additional CSS classes
 #}
 {%- set tooltip = html_cva(
     base: 'absolute z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground animate-in',
@@ -26,7 +26,7 @@
     defaultVariant: { side: 'top' },
 ) -%}
 
-<div class="{{ ['relative inline-block', class|default('')]|tailwind_merge }}" x-data="{ show: false }" {{ html_attrs() }}>
+<div x-data="{ show: false }" {{ html_attrs({class: 'relative inline-block'}, exclude=['side', 'text']) }}>
     <div @mouseenter="show = true" @mouseleave="show = false" @focus="show = true" @blur="show = false">
         {% block trigger %}{% endblock %}
     </div>
@@ -40,7 +40,7 @@
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
         role="tooltip"
-        class="{{ tooltip.apply({side: side|default(null)})|tailwind_merge }}"
+        class="{{ tooltip.apply({side: side|default(null)}) }}"
     >
         {{ text }}
     </div>

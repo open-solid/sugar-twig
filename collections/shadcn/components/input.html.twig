@@ -4,7 +4,7 @@
     Usage:
         <Input placeholder="Email" type="email" name="email" />
         <Input type="password" name="password" required />
-        <Input type="file" class="cursor-pointer" />
+        <Input type="file" className="cursor-pointer" />
 
     Parameters:
         type        - Input type (default: 'text')
@@ -12,7 +12,7 @@
         name        - Input name
         id          - Input id
         value       - Input value
-        class       - Additional CSS classes
+        className   - Additional CSS classes
 #}
 {%- set type = type|default('text') -%}
 
@@ -22,6 +22,5 @@
     {% if id is defined %}id="{{ id }}"{% endif %}
     {% if value is defined %}value="{{ value }}"{% endif %}
     {% if placeholder is defined %}placeholder="{{ placeholder }}"{% endif %}
-    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 {{ class|default('') }}"
-    {{ html_attrs(exclude=['id', 'name', 'placeholder', 'type', 'value']) }}
+    {{ html_attrs({class: 'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'}, exclude=['id', 'name', 'placeholder', 'type', 'value']) }}
 />

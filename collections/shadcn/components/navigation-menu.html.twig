@@ -11,9 +11,9 @@
     Parameters:
         items - Array of {label, href?, content?}
                If href: renders as link. If content: renders dropdown.
-        class - Additional CSS classes
+        className - Additional CSS classes
 #}
-<nav class="relative {{ class|default('') }}" x-data="{ active: null }" @click.outside="active = null" {{ html_attrs() }}>
+<nav x-data="{ active: null }" @click.outside="active = null" {{ html_attrs({class: 'relative'}) }}>
     <ul class="group flex flex-1 list-none items-center justify-center space-x-1">
         {%- for item in items|default([]) -%}
         <li class="relative">

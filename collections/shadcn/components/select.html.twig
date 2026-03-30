@@ -19,18 +19,17 @@
         placeholder - Placeholder text (default: 'Select...')
         options     - Array of {value, label}
         value       - Initially selected value
-        class       - Additional CSS classes
+        className   - Additional CSS classes
 #}
 {%- set placeholder = placeholder|default('Select...') -%}
 
 <div
-    class="relative {{ class|default('') }}"
     x-data="{
         open: false,
         selected: '{{ value|default('') }}',
         label: '{{ value is defined ? (options|filter(o => o.value == value)|first).label|default('') : '' }}'
     }"
-    {{ html_attrs(exclude=['name', 'placeholder', 'value']) }}
+    {{ html_attrs({class: 'relative'}, exclude=['name', 'placeholder', 'value']) }}
 >
     {%- if name is defined -%}
     <input type="hidden" name="{{ name }}" :value="selected" />

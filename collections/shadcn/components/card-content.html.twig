@@ -7,8 +7,8 @@
         </CardContent>
 
     Parameters:
-        class - Additional CSS classes
+        className - Additional CSS classes
 #}
-<div data-slot="card-content" class="{{ ['px-4 group-data-[size=sm]/card:px-3', class|default('')]|tailwind_merge }}" {{ html_attrs() }}>
+<div data-slot="card-content" {{ html_attrs({class: 'px-4 group-data-[size=sm]/card:px-3'}) }}>
     {%- block content %}{% endblock -%}
 </div>

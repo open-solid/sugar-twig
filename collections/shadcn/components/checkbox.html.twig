@@ -14,7 +14,7 @@
         invalid  - Whether invalid (default: false)
         label       - Label text
         description - Description text below the label
-        class       - Additional CSS classes for the wrapper
+        className   - Additional CSS classes for the wrapper
 #}
 {% set _id = id|default('checkbox-' ~ random()) %}
 {% set _name = name|default(_id) %}
@@ -28,7 +28,7 @@
     data-orientation="horizontal"
     {% if _invalid %}data-invalid="true"{% endif %}
     {% if _disabled %}data-disabled="true"{% endif %}
-    class="{{ ['group/field flex w-full gap-2 data-[invalid=true]:text-destructive flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px', class|default('')]|tailwind_merge }}"
+    {{ html_attrs({class: 'group/field flex w-full gap-2 data-[invalid=true]:text-destructive flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px'}, exclude=['checked', 'disabled', 'id', 'invalid', 'label', 'name']) }}
     x-data="{ checked: {{ _checked ? 'true' : 'false' }} }"
 >
     <span

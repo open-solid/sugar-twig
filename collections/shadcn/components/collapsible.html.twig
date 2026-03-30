@@ -9,11 +9,11 @@
 
     Parameters:
         open  - Initial open state (default: false)
-        class - Additional CSS classes
+        className - Additional CSS classes
 #}
 {%- set open = open|default(false) -%}
 
-<div x-data="{ open: {{ open ? 'true' : 'false' }} }" class="{{ class|default('') }}" {{ html_attrs(exclude=['open']) }}>
+<div x-data="{ open: {{ open ? 'true' : 'false' }} }" {{ html_attrs(exclude=['open']) }}>
     <div @click="open = !open" class="cursor-pointer">
         {% block trigger %}{% endblock %}
     </div>

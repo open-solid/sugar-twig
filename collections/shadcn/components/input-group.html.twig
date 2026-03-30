@@ -9,9 +9,9 @@
         </InputGroup>
 
     Parameters:
-        class - Additional CSS classes
+        className - Additional CSS classes
 #}
-<div class="relative {{ class|default('') }}" {{ html_attrs() }}>
+<div {{ html_attrs({class: 'relative'}) }}>
     {% set prefix_content %}{% block prefix %}{% endblock %}{% endset %}
     {% if prefix_content|trim is not empty %}
     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">

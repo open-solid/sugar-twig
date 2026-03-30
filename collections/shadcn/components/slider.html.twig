@@ -12,7 +12,7 @@
         min   - Minimum value (default: 0)
         max   - Maximum value (default: 100)
         step  - Step increment (default: 1)
-        class - Additional CSS classes
+        className - Additional CSS classes
 #}
 {%- set value = value|default(50) -%}
 {%- set min = min|default(0) -%}
@@ -27,6 +27,5 @@
     min="{{ min }}"
     max="{{ max }}"
     step="{{ step }}"
-    class="w-full h-2 cursor-pointer appearance-none rounded-full bg-primary/20 accent-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 {{ class|default('') }}"
-    {{ html_attrs(exclude=['id', 'max', 'min', 'name', 'step', 'value']) }}
+    {{ html_attrs({class: 'w-full h-2 cursor-pointer appearance-none rounded-full bg-primary/20 accent-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50'}, exclude=['id', 'max', 'min', 'name', 'step', 'value']) }}
 />

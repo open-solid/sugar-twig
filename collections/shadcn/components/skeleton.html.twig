@@ -2,10 +2,10 @@
     Skeleton component - shadcn/ui port
 
     Usage:
-        <Skeleton class="h-4 w-[250px]" />
-        <Skeleton class="h-12 w-12 rounded-full" />
+        <Skeleton className="h-4 w-[250px]" />
+        <Skeleton className="h-12 w-12 rounded-full" />
 
     Parameters:
-        class - CSS classes for width/height (required, e.g. 'h-4 w-[250px]')
+        className - CSS classes for width/height (required, e.g. 'h-4 w-[250px]')
 #}
-<div class="animate-pulse rounded-md bg-primary/10 {{ class|default('') }}" {{ html_attrs() }}></div>
+<div {{ html_attrs({class: 'animate-pulse rounded-md bg-primary/10'}) }}></div>

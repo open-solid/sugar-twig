@@ -20,7 +20,7 @@
         title       - Sheet title
         description - Sheet description
         open        - Initial open state (default: false)
-        class       - Additional CSS classes
+        className   - Additional CSS classes
 #}
 {%- set open = open|default(false) -%}
 
@@ -56,7 +56,7 @@
 
             {# Content #}
             <div
-                class="{{ content.apply({side: side|default(null)}, class|default(null))|tailwind_merge }}"
+                {{ html_attrs({class: content.apply({side: side|default(null)})}, exclude=['open', 'side', 'title']) }}
                 x-show="open"
                 x-transition:enter="transition ease-in-out duration-300"
                 x-transition:enter-start="{{ _enters[side|default('right')] }}"

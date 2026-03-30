@@ -17,9 +17,9 @@
         description - Description/help text
         error       - Error message
         id          - Field id (links label to input)
-        class       - Additional CSS classes
+        className   - Additional CSS classes
 #}
-<div class="space-y-2 {{ class|default('') }}" {{ html_attrs(exclude=['id', 'label']) }}>
+<div {{ html_attrs({class: 'space-y-2'}, exclude=['error', 'id', 'label']) }}>
     {%- if label is defined -%}
     <label{% if id is defined %} for="{{ id }}"{% endif %} class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
         {{ label }}

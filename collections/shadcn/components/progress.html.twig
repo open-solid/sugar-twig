@@ -3,14 +3,14 @@
 
     Usage:
         <Progress value="33" />
-        <Progress value="75" class="w-[60%]" />
+        <Progress value="75" className="w-[60%]" />
 
     Parameters:
-        value - Progress percentage 0-100 (default: 0)
-        class - Additional CSS classes
+        value     - Progress percentage 0-100 (default: 0)
+        className - Additional CSS classes
 #}
 {%- set value = value|default(0) -%}
 
-<div role="progressbar" aria-valuenow="{{ value }}" aria-valuemin="0" aria-valuemax="100" class="relative h-2 w-full overflow-hidden rounded-full bg-primary/20 {{ class|default('') }}" {{ html_attrs(exclude=['value']) }}>
+<div role="progressbar" aria-valuenow="{{ value }}" aria-valuemin="0" aria-valuemax="100" {{ html_attrs({class: 'relative h-2 w-full overflow-hidden rounded-full bg-primary/20'}, exclude=['value']) }}>
     <div class="h-full w-full flex-1 bg-primary transition-all" style="transform: translateX(-{{ 100 - value }}%);"></div>
 </div>

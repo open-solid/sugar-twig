@@ -7,9 +7,9 @@
         <Badge variant="outline" content="Draft" />
 
     Parameters:
-        variant - default|secondary|destructive|outline (default: 'default')
-        content - Badge text
-        class   - Additional CSS classes
+        variant   - default|secondary|destructive|outline (default: 'default')
+        content   - Badge text
+        className - Additional CSS classes
 #}
 {%- set badge = html_cva(
     base: 'inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
@@ -26,6 +26,6 @@
     },
 ) -%}
 
-<span class="{{ badge.apply({variant: variant|default(null)}, class|default(null))|tailwind_merge }}" {{ html_attrs(exclude=['content']) }}>
+<span {{ html_attrs({class: badge.apply({variant: variant|default(null)})}, exclude=['content', 'variant']) }}>
     {{- content|default('')|raw -}}
 </span>

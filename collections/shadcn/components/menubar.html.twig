@@ -19,14 +19,13 @@
 
     Parameters:
         items   - Array of {label, content} where content is dropdown HTML
-        class   - Additional CSS classes
+        className - Additional CSS classes
 #}
 <div
-    class="flex h-9 items-center space-x-1 rounded-md border bg-background p-1 shadow-xs {{ class|default('') }}"
     x-data="{ active: null }"
     @click.outside="active = null"
     role="menubar"
-    {{ html_attrs() }}
+    {{ html_attrs({class: 'flex h-9 items-center space-x-1 rounded-md border bg-background p-1 shadow-xs'}) }}
 >
     {%- for item in items|default([]) -%}
     <div class="relative">

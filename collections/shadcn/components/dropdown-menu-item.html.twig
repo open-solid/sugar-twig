@@ -7,11 +7,11 @@
         <DropdownMenuItem content="Delete" variant="destructive" />
 
     Parameters:
-        content  - Item label
-        href     - Optional link URL
-        variant  - default|destructive (default: 'default')
-        disabled - Whether disabled
-        class    - Additional CSS classes
+        content   - Item label
+        href      - Optional link URL
+        variant   - default|destructive (default: 'default')
+        disabled  - Whether disabled
+        className - Additional CSS classes
 #}
 {%- set as = href is defined ? 'a' : 'div' -%}
 
@@ -30,9 +30,8 @@
 
 <{{ as }}
     {% if href is defined %}href="{{ href }}"{% endif %}
-    class="{{ menuItem.apply({variant: variant|default(null)}, class|default(null))|tailwind_merge }} {{ disabled|default(false) ? 'pointer-events-none opacity-50' : '' }}"
     role="menuitem"
-    {{ html_attrs(exclude=['content', 'disabled', 'href']) }}
+    {{ html_attrs({class: menuItem.apply({variant: variant|default(null)}) ~ (disabled|default(false) ? ' pointer-events-none opacity-50' : '')}, exclude=['content', 'disabled', 'href', 'variant']) }}
 >
     {{- content|default('')|raw -}}
 </{{ as }}>

@@ -8,11 +8,11 @@
     Parameters:
         ratio   - Aspect ratio value (default: 16/9)
         content - Inner HTML content
-        class   - Additional CSS classes
+        className - Additional CSS classes
 #}
 {%- set ratio = ratio|default(16/9) -%}
 
-<div class="relative w-full {{ class|default('') }}" style="padding-bottom: {{ (1 / ratio * 100)|round(4) }}%;" {{ html_attrs(exclude=['content']) }}>
+<div style="padding-bottom: {{ (1 / ratio * 100)|round(4) }}%;" {{ html_attrs({class: 'relative w-full'}, exclude=['content', 'ratio']) }}>
     <div class="absolute inset-0">
         {{- content|default('')|raw -}}
     </div>

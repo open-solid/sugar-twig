@@ -17,8 +17,8 @@
         </DropdownMenu>
 
     Parameters:
-        align - start|center|end (default: 'start')
-        class - Additional CSS classes
+        align     - start|center|end (default: 'start')
+        className - Additional CSS classes
 #}
 {%- set panel = html_cva(
     base: 'absolute z-50 mt-1 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md',
@@ -32,7 +32,7 @@
     defaultVariant: { align: 'start' },
 ) -%}
 
-<div class="{{ ['relative inline-block', class|default('')]|tailwind_merge }}" x-data="{ open: false }" {{ html_attrs() }}>
+<div x-data="{ open: false }" {{ html_attrs({class: 'relative inline-block'}, exclude=['align']) }}>
     <div @click="open = !open">
         {% block trigger %}{% endblock %}
     </div>
@@ -47,7 +47,7 @@
         x-transition:leave-end="opacity-0 scale-95"
         @click.outside="open = false"
         @keydown.escape.window="open = false"
-        class="{{ panel.apply({align: align|default(null)})|tailwind_merge }}"
+        class="{{ panel.apply({align: align|default(null)}) }}"
         role="menu"
     >
         {% block body %}{% endblock %}

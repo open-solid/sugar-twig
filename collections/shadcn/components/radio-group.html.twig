@@ -11,9 +11,9 @@
     Parameters:
         name    - Radio group name
         items   - Array of {value, label, id?, checked?}
-        class   - Additional CSS classes
+        className - Additional CSS classes
 #}
-<div role="radiogroup" class="grid gap-2 {{ class|default('') }}" {{ html_attrs(exclude=['name']) }}>
+<div role="radiogroup" {{ html_attrs({class: 'grid gap-2'}, exclude=['items', 'name']) }}>
     {%- for item in items|default([]) -%}
     {%- set item_id = item.id|default(name ~ '_' ~ item.value) -%}
     <div class="flex items-center space-x-2">

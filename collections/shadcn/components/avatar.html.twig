@@ -7,11 +7,11 @@
         <Avatar fallback="JD" size="lg" />
 
     Parameters:
-        src      - Image source URL
-        alt      - Image alt text
-        fallback - Fallback text (e.g. initials "CN")
-        size     - sm|default|lg (default: 'default')
-        class    - Additional CSS classes
+        src       - Image source URL
+        alt       - Image alt text
+        fallback  - Fallback text (e.g. initials "CN")
+        size      - sm|default|lg (default: 'default')
+        className - Additional CSS classes
 #}
 {%- set avatar = html_cva(
     base: 'relative flex shrink-0 overflow-hidden rounded-full',
@@ -27,7 +27,7 @@
     },
 ) -%}
 
-<span class="{{ avatar.apply({size: size|default(null)}, class|default(null))|tailwind_merge }}" {{ html_attrs(exclude=['alt', 'size', 'src']) }}>
+<span {{ html_attrs({class: avatar.apply({size: size|default(null)})}, exclude=['alt', 'size', 'src', 'fallback']) }}>
     {%- if src is defined -%}
     <img class="aspect-square h-full w-full" src="{{ src }}" alt="{{ alt|default('') }}" />
     {%- else -%}

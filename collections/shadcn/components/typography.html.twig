@@ -8,9 +8,9 @@
         <Typography as="code" content="npm install" />
 
     Parameters:
-        as      - h1|h2|h3|h4|p|blockquote|lead|large|small|muted|code (default: 'p')
-        content - Text content
-        class   - Additional CSS classes
+        as        - h1|h2|h3|h4|p|blockquote|lead|large|small|muted|code (default: 'p')
+        content   - Text content
+        className - Additional CSS classes
 #}
 
 {%- set component = html_cva(
@@ -47,6 +47,6 @@
     code: 'code',
 } -%}
 
-<{{ _tags[as|default('p')] }} class="{{ component.apply({as: as|default(null)}, class|default(null))|tailwind_merge }}" {{ html_attrs(exclude=['content']) }}>
+<{{ _tags[as|default('p')] }} {{ html_attrs({class: component.apply({as: as|default(null)})}, exclude=['as', 'content']) }}>
     {{- content|default('')|raw -}}
 </{{ _tags[as|default('p')] }}>

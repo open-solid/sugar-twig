@@ -17,15 +17,14 @@
     Parameters:
         side  - left|right (default: 'left')
         open  - Initial open state (default: true)
-        class - Additional CSS classes
+        className - Additional CSS classes
 #}
 {%- set side = side|default('left') -%}
 {%- set open = open|default(true) -%}
 
 <div
     x-data="{ open: {{ open ? 'true' : 'false' }} }"
-    class="flex {{ class|default('') }}"
-    {{ html_attrs(exclude=['open']) }}
+    {{ html_attrs({class: 'flex'}, exclude=['open', 'side']) }}
 >
     {# Sidebar panel #}
     <aside

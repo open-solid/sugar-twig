@@ -6,11 +6,11 @@
         <SidebarItem href="/settings" content="Settings" />
 
     Parameters:
-        href    - Link URL
-        icon    - Icon SVG HTML
-        content - Item label
-        active  - Whether currently active (default: false)
-        class   - Additional CSS classes
+        href      - Link URL
+        icon      - Icon SVG HTML
+        content   - Item label
+        active    - Whether currently active (default: false)
+        className - Additional CSS classes
 #}
 {%- set active = active|default(false) -%}
 
@@ -27,8 +27,7 @@
 
 <a
     {% if href is defined %}href="{{ href }}"{% endif %}
-    class="{{ component.apply({active: active ? 'true' : 'false'}, class|default(null))|tailwind_merge }}"
-    {{ html_attrs(exclude=['content', 'href']) }}
+    {{ html_attrs({class: component.apply({active: active ? 'true' : 'false'})}, exclude=['active', 'content', 'href']) }}
 >
     {%- if icon is defined -%}
     <span class="size-4 shrink-0">{{ icon|raw }}</span>
