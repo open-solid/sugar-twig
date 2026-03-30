@@ -15,7 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
     description: 'Install a Sugar Twig components.',
     usages: [
         'sugar:install shadcn/button',
-        'sugar:install lucide/heart-pulse',
+        'sugar:install shadcn/button shadcn/card lucide/heart-pulse',
     ],
 )]
 final readonly class InstallCommand
@@ -28,35 +28,47 @@ final readonly class InstallCommand
     ) {
     }
 
-    public function __invoke(SymfonyStyle $io, #[Argument] string $name, #[Argument] string $targetDir = 'templates'): int
+    /**
+     * @param list<string> $names
+     */
+    public function __invoke(SymfonyStyle $io, #[Argument] array $names, #[Argument] string $targetDir = 'templates'): int
     {
-        $parts = explode('/', $name);
-        if (2 !== \count($parts)) {
-            $io->error(sprintf('Invalid name "%s". Expected format: collection/element (e.g. shadcn/button).', $name));
-
-            return 1;
-        }
-
-        [$collection, $element] = $parts;
-        $io->comment(sprintf('Fetching %s registry...', $collection));
-        $registryUrl = sprintf(self::COLLECTION_URL, $collection);
-
-        $registry = json_decode(file_get_contents($registryUrl), true);
-        if (!isset($registry['namespace'][$element])) {
-            $io->error(sprintf('Element "%s" not found in the "%s" collection registry.', $element, $collection));
-        }
-
-        $io->comment(sprintf('Installing %s...', $name));
-        $basePath = $registry['path'];
+        $registries = [];
         $installed = [];
-        foreach ($registry['namespace'][$element] as $path) {
-            $fileUrl = $basePath.$path;
-            $targetFile = $this->projectDir.DIRECTORY_SEPARATOR.$targetDir.DIRECTORY_SEPARATOR.$path;
-            $this->filesystem->copy($fileUrl, $targetFile, true);
-            $installed[] = $targetFile;
+
+        foreach ($names as $name) {
+            $parts = explode('/', $name);
+            if (2 !== \count($parts)) {
+                $io->error(sprintf('Invalid name "%s". Expected format: collection/element (e.g. shadcn/button).', $name));
+
+                return 1;
+            }
+
+            [$collection, $element] = $parts;
+
+            if (!isset($registries[$collection])) {
+                $io->comment(sprintf('Fetching %s registry...', $collection));
+                $registryUrl = sprintf(self::COLLECTION_URL, $collection);
+                $registries[$collection] = json_decode(file_get_contents($registryUrl), true);
+            }
+
+            $registry = $registries[$collection];
+            if (!isset($registry['namespace'][$element])) {
+                $io->error(sprintf('Element "%s" not found in the "%s" collection registry.', $element, $collection));
+
+                return 1;
+            }
+
+            $io->comment(sprintf('Installing %s...', $name));
+            foreach ($registry['namespace'][$element] as $path) {
+                $fileUrl = $registry['path'].$path;
+                $targetFile = $this->projectDir.DIRECTORY_SEPARATOR.$targetDir.DIRECTORY_SEPARATOR.$path;
+                $this->filesystem->copy($fileUrl, $targetFile, true);
+                $installed[] = $targetFile;
+            }
         }
 
-        $io->success(sprintf('"%s" installed to:%s', $name, "\n - ".implode("\n - ", $installed)));
+        $io->success(sprintf('Installed to:%s', "\n - ".implode("\n - ", $installed)));
 
         return 0;
     }
