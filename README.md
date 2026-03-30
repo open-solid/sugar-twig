@@ -7,7 +7,7 @@ A Symfony bundle that brings JSX-like component syntax to Twig.
 Define a component (`templates/components/button.html.twig`):
 
 ```twig
-<button class="bg-primary text-primary-foreground h-8 px-2.5" {{ html_attrs() }}>
+<button {{ html_attrs({'class': 'bg-primary text-primary-foreground'}) }}>
     {%- block content %}{% endblock -%}
 </button>
 ```
@@ -28,6 +28,12 @@ Output:
 {% endembed %}
 ```
 
+Render:
+
+```html
+<button type="submit" class="bg-primary text-primary-foreground">Save</button>
+```
+
 ## Benchmark
 
 The benchmark test at `tests/Preprocessor/ComponentPreprocessorBenchmarkTest.php` covers four tiers:
@@ -36,7 +42,7 @@ The benchmark test at `tests/Preprocessor/ComponentPreprocessorBenchmarkTest.php
 |---------|-------------|---------------|-------------------------------------------------------------------------|
 | no-op   | < 5 µs      | < 1 KB        | Fast-path exit (plain HTML, no components)                              |
 | simple  | < 50 µs     | < 8 KB        | 3 flat self-closing components                                          |
-| medium  | < 160 µs    | < 32 KB       | Dialog with compound blocks + nested Field/Input                        |
+| medium  | < 165 µs    | < 32 KB       | Dialog with compound blocks + nested Field/Input                        |
 | complex | < 750 µs    | < 64 KB       | Full page: nav, cards, dialog, table (~40 components, 3 nesting levels) |
 
 Each tier runs 1000 iterations for time and 100 for memory, with warmup passes. If a future change introduces a

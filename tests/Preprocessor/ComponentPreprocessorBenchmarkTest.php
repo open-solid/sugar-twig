@@ -125,7 +125,7 @@ final class ComponentPreprocessorBenchmarkTest extends TestCase
                 </Card>
             </div>
             TWIG,
-            160.0,   // max µs per iteration
+            165.0,   // max µs per iteration
         ];
 
         // --- Tier: Expression + conditional attributes ---

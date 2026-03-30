@@ -28,7 +28,7 @@ final class HtmlAttrsRuntime implements RuntimeExtensionInterface
         'inputmode' => true, 'is' => true, 'itemid' => true, 'itemprop' => true, 'itemref' => true, 'itemscope' => true,
         'itemtype' => true, 'lang' => true, 'nonce' => true, 'part' => true, 'popover' => true, 'popovertarget' => true,
         'popovertargetaction' => true, 'role' => true, 'slot' => true, 'spellcheck' => true, 'style' => true,
-        'tabindex' => true, 'title' => true, 'translate' => true, 'virtualkeyboardpolicy' => true,
+        'tabindex' => true, 'title' => true, 'translate' => true, 'virtualkeyboardpolicy' => true, 'class' => true,
         // Link and navigation
         'download' => true, 'href' => true, 'hreflang' => true, 'ping' => true, 'referrerpolicy' => true, 'rel' => true, 'target' => true,
         // Embedded content
@@ -55,17 +55,28 @@ final class HtmlAttrsRuntime implements RuntimeExtensionInterface
 
     /**
      * Filters the template context to pass through only recognized HTML attributes,
-     * then delegates to HtmlExtension::htmlAttr() for safe, escaped rendering.
+     * merges with defaults, and delegates to HtmlExtension::htmlAttr() for safe rendering.
      *
-     * @param array<string, mixed> $context Full template context (injected by Twig via needs_context)
-     * @param list<string>         $exclude Attributes to exclude even if they are valid HTML (e.g., when the component handles them explicitly)
+     * @param array<string, mixed> $context  Full template context (injected by Twig via needs_context)
+     * @param array<string, mixed> $defaults Default attributes; context values override these.
+     *                                       Use 'className' to set a default class that merges
+     *                                       with the caller's 'class' via tailwind_merge.
+     * @param list<string>         $exclude  Attributes to exclude even if they are valid HTML
      */
-    public function render(Environment $env, array $context, array $exclude = []): string
+    public function render(Environment $env, array $context, array $defaults = [], array $exclude = []): string
     {
         $excluded = [] === $exclude ? self::TWIG_INTERNALS : self::TWIG_INTERNALS + array_flip($exclude);
 
+        if (isset($context['className'])) {
+            $context['class'] = isset($defaults['class'])
+                ? $this->tailwindMerge($env, $defaults['class'].' '.$context['className'])
+                : $context['className'];
+
+            unset($context['className']);
+        }
+
         $attrs = [];
-        foreach ($context as $key => $value) {
+        foreach ($context + $defaults as $key => $value) {
             if (isset($excluded[$key])) {
                 continue;
             }
@@ -76,6 +87,15 @@ final class HtmlAttrsRuntime implements RuntimeExtensionInterface
         }
 
         return HtmlExtension::htmlAttr($env, $attrs);
+    }
+
+    private function tailwindMerge(Environment $env, string $classes): string
+    {
+        if (null === $filter = $env->getFilter('tailwind_merge')) {
+            return $classes;
+        }
+
+        return $filter->getCallable()($classes);
     }
 
     private static function isHtmlAttribute(string $name): bool

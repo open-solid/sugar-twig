@@ -37,25 +37,16 @@ final class HtmlAttrsRuntimeTest extends TestCase
     #[Test]
     public function it_renders_standard_html_attributes(): void
     {
-        $context = ['id' => 'main', 'role' => 'alert', 'variant' => 'destructive'];
+        $context = ['id' => 'main', 'role' => 'alert', 'class' => 'text-red-500', 'variant' => 'destructive'];
         $result = $this->runtime->render($this->env, $context);
 
-        self::assertSame('id="main" role="alert"', $result);
+        self::assertSame('id="main" role="alert" class="text-red-500"', $result);
     }
 
     #[Test]
     public function it_filters_out_non_html_attributes(): void
     {
         $context = ['variant' => 'destructive', 'items' => [], 'separator' => '/', 'id' => 'main'];
-        $result = $this->runtime->render($this->env, $context);
-
-        self::assertSame('id="main"', $result);
-    }
-
-    #[Test]
-    public function it_filters_out_class_attribute(): void
-    {
-        $context = ['class' => 'text-red-500', 'id' => 'main'];
         $result = $this->runtime->render($this->env, $context);
 
         self::assertSame('id="main"', $result);
@@ -92,7 +83,7 @@ final class HtmlAttrsRuntimeTest extends TestCase
     public function it_excludes_html_attributes_used_as_component_props(): void
     {
         $context = ['title' => 'My Dialog', 'open' => true, 'id' => 'dialog-1', 'aria-live' => 'polite'];
-        $result = $this->runtime->render($this->env, $context, ['title', 'open']);
+        $result = $this->runtime->render($this->env, $context, [], ['title', 'open']);
 
         self::assertSame('id="dialog-1" aria-live="polite"', $result);
     }
@@ -140,6 +131,51 @@ final class HtmlAttrsRuntimeTest extends TestCase
         $result = $this->runtime->render($this->env, $context);
 
         self::assertSame('id="test"', $result);
+    }
+
+    #[Test]
+    public function it_applies_defaults_when_not_in_context(): void
+    {
+        $context = ['id' => 'main'];
+        $result = $this->runtime->render($this->env, $context, ['role' => 'button', 'tabindex' => '0']);
+
+        self::assertSame('id="main" role="button" tabindex="0"', $result);
+    }
+
+    #[Test]
+    public function it_overrides_defaults_with_context_values(): void
+    {
+        $context = ['role' => 'alert', 'id' => 'main'];
+        $result = $this->runtime->render($this->env, $context, ['role' => 'button', 'tabindex' => '0']);
+
+        self::assertSame('role="alert" id="main" tabindex="0"', $result);
+    }
+
+    #[Test]
+    public function it_merges_class_name_default_with_context_class(): void
+    {
+        // Without tailwind_merge filter registered, classes are concatenated
+        $result = $this->runtime->render($this->env, context: ['className' => 'bg-primary p-4'], defaults: ['class' => 'text-red-500']);
+
+        self::assertSame('class="text-red-500 bg-primary p-4"', $result);
+    }
+
+    #[Test]
+    public function it_applies_class_name_default_when_no_class_in_context(): void
+    {
+        $context = ['id' => 'main'];
+        $result = $this->runtime->render($this->env, $context, ['class' => 'bg-primary p-4']);
+
+        self::assertSame('id="main" class="bg-primary p-4"', $result);
+    }
+
+    #[Test]
+    public function it_combines_defaults_with_exclude(): void
+    {
+        $context = ['title' => 'Hello', 'id' => 'main'];
+        $result = $this->runtime->render($this->env, $context, ['role' => 'dialog'], ['title']);
+
+        self::assertSame('id="main" role="dialog"', $result);
     }
 
     #[Test]
