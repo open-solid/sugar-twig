@@ -15,7 +15,7 @@ Define a component (`templates/components/button.html.twig`):
 Use it:
 
 ```twig
-<Button type="submit">Save</Button>
+<Button type="submit" className="h-8 px-2.5">Save</Button>
 ```
 
 It compiles to native Twig `embed`/`include` calls at load time — zero runtime overhead, no custom tags to learn.
@@ -23,7 +23,7 @@ It compiles to native Twig `embed`/`include` calls at load time — zero runtime
 Output:
 
 ```twig
-{% embed 'components/button.html.twig' with {type: 'submit'} only %}
+{% embed 'components/button.html.twig' with {type: 'submit' className: 'h-8 px-2.5'} only %}
     {% block content %}Save{% endblock %}
 {% endembed %}
 ```
@@ -31,7 +31,7 @@ Output:
 Render:
 
 ```html
-<button type="submit" class="bg-primary text-primary-foreground">Save</button>
+<button type="submit" class="bg-primary text-primary-foreground h-8 px-2.5">Save</button>
 ```
 
 ## Benchmark
