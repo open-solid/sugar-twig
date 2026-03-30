@@ -156,7 +156,6 @@ final class HtmlAttrsRuntimeTest extends TestCase
     #[Test]
     public function it_merges_class_name_default_with_context_class(): void
     {
-        // Without tailwind_merge filter registered, classes are concatenated
         $result = $this->runtime->render($this->env, context: ['className' => 'bg-primary p-4'], defaults: ['class' => 'text-red-500']);
 
         self::assertSame('class="text-red-500 bg-primary p-4"', $result);
@@ -183,9 +182,8 @@ final class HtmlAttrsRuntimeTest extends TestCase
     #[Test]
     public function it_calls_tailwind_merge_filter_when_registered(): void
     {
-        $this->env->addFilter(new TwigFilter('tailwind_merge', new TailwindRuntime()->merge(...)));
-
-        $result = $this->runtime->render($this->env, context: ['className' => 'p-8'], defaults: ['class' => 'p-4 bg-primary']);
+        $runtime = new HtmlAttrsRuntime(new TailwindRuntime());
+        $result = $runtime->render($this->env, context: ['className' => 'p-8'], defaults: ['class' => 'p-4 bg-primary']);
 
         self::assertSame('class="bg-primary p-8"', $result);
     }

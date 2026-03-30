@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace OpenSolid\SugarTwig\Extension;
 
+use TalesFromADev\Twig\Extra\Tailwind\TailwindRuntime;
 use Twig\Environment;
 use Twig\Extension\RuntimeExtensionInterface;
 use Twig\Extra\Html\HtmlExtension;
 
-final class HtmlAttrsRuntime implements RuntimeExtensionInterface
+final readonly class HtmlAttrsRuntime implements RuntimeExtensionInterface
 {
+    public function __construct(
+        private ?TailwindRuntime $tailwindRuntime = null,
+    ) {
+    }
+
     /**
      * Twig internal context variables — never rendered as HTML attributes.
      */
@@ -68,9 +74,14 @@ final class HtmlAttrsRuntime implements RuntimeExtensionInterface
         $excluded = [] === $exclude ? self::TWIG_INTERNALS : self::TWIG_INTERNALS + array_flip($exclude);
 
         if (isset($context['className'])) {
-            $context['class'] = isset($defaults['class'])
-                ? $this->tailwindMerge($env, $defaults['class'].' '.$context['className'])
-                : $context['className'];
+            if (isset($defaults['class'])) {
+                $context['class'] = $defaults['class'].' '.$context['className'];
+                if ($this->tailwindRuntime) {
+                    $context['class'] = $this->tailwindRuntime->merge($context['class']);
+                }
+            } else {
+                $defaults['class'] = $context['className'];
+            }
 
             unset($context['className']);
         }
@@ -87,15 +98,6 @@ final class HtmlAttrsRuntime implements RuntimeExtensionInterface
         }
 
         return HtmlExtension::htmlAttr($env, $attrs);
-    }
-
-    private function tailwindMerge(Environment $env, string $classes): string
-    {
-        if (null === $filter = $env->getFilter('tailwind_merge')) {
-            return $classes;
-        }
-
-        return $filter->getCallable()($classes);
     }
 
     private static function isHtmlAttribute(string $name): bool

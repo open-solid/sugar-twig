@@ -34,6 +34,9 @@ return static function (ContainerConfigurator $container): void {
                 ->tag('twig.extension')
 
             ->set('sugar_twig.html_attrs_runtime', HtmlAttrsRuntime::class)
+                ->args([
+                    service('twig.runtime.tailwind')->nullOnInvalid(),
+                ])
                 ->tag('twig.runtime')
     ;
 };
