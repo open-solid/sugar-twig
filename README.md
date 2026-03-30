@@ -1,4 +1,4 @@
-# Twig Component
+# Sugar Twig
 
 A Symfony bundle that brings JSX-like component syntax to Twig.
 
