@@ -1,5 +1,6 @@
 <?php
 
+use OpenSolid\SugarTwig\Command\InstallCommand;
 use OpenSolid\SugarTwig\Extension\HtmlAttrsExtension;
 use OpenSolid\SugarTwig\Extension\HtmlAttrsRuntime;
 use OpenSolid\SugarTwig\Parser\ComponentTagParser;
@@ -8,6 +9,7 @@ use OpenSolid\SugarTwig\Preprocessor\ComponentNameResolver;
 use OpenSolid\SugarTwig\Preprocessor\ComponentPreprocessor;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $container): void {
@@ -38,5 +40,12 @@ return static function (ContainerConfigurator $container): void {
                     service('twig.runtime.tailwind')->nullOnInvalid(),
                 ])
                 ->tag('twig.runtime')
+
+            ->set('sugar_twig.install_command', InstallCommand::class)
+                ->args([
+                    param('kernel.project_dir'),
+                    service('filesystem')->ignoreOnInvalid(),
+                ])
+                ->tag('console.command')
     ;
 };

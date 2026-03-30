@@ -1,0 +1,8 @@
+{
+  "name": "lucide",
+  "path": "https://raw.githubusercontent.com/open-solid/sugar-twig/refs/heads/main/collections/lucide/",
+  "namespace": {
+    "chevron-right": "icon/chevron-right.html.twig",
+    "heart-pulse": "icon/heart-pulse.html.twig"
+  }
+}

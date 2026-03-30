@@ -152,8 +152,8 @@ final readonly class ComponentPreprocessor
             $attrsStr = $this->serializeAttributes($attributes);
 
             return '' !== $attrsStr
-                ? "{{ include('{$templatePath}', {{$attrsStr}}, with_context=false) }}"
-                : "{{ include('{$templatePath}', {}, with_context=false) }}";
+                ? "{{ include('$templatePath', {{$attrsStr}}, with_context=false) }}"
+                : "{{ include('$templatePath', {}, with_context=false) }}";
         }
 
         // Paired compound block tags (e.g. <BlockTrigger>...</BlockTrigger>): recursively
