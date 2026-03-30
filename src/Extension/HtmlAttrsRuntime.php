@@ -37,11 +37,6 @@ final readonly class HtmlAttrsRuntime implements RuntimeExtensionInterface
 
         if (isset($context['className'])) {
             $context['class'] = isset($defaults['class']) ? $defaults['class'].' '.$context['className'] : $context['className'];
-
-            if ($this->tailwindRuntime) {
-                $context['class'] = $this->tailwindRuntime->merge($context['class']);
-            }
-
             unset($context['className']);
         }
 
@@ -49,6 +44,10 @@ final readonly class HtmlAttrsRuntime implements RuntimeExtensionInterface
         foreach ($context + $defaults as $key => $value) {
             if (isset($excluded[$key]) || !is_scalar($value)) {
                 continue;
+            }
+
+            if ('class' === $key && $this->tailwindRuntime) {
+                $value = $this->tailwindRuntime->merge($value);
             }
 
             $attrs[$key] = $value;
