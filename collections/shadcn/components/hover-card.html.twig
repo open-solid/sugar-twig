@@ -1,0 +1,52 @@
+{#
+    Hover Card component - shadcn/ui port (Alpine.js)
+
+    Usage:
+        <HoverCard>
+            <BlockTrigger><a href="#" class="text-sm font-medium underline underline-offset-4">@vercel</a></BlockTrigger>
+            <BlockBody>
+                <div class="space-y-1">
+                    <h4 class="text-sm font-semibold">@vercel</h4>
+                    <p class="text-sm">The platform for frontend developers.</p>
+                </div>
+            </BlockBody>
+        </HoverCard>
+
+    Parameters:
+        side  - top|bottom (default: 'bottom')
+        align - start|center|end (default: 'center')
+        class - Additional CSS classes
+#}
+{%- set panel = html_cva(
+    base: 'absolute z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md',
+    variants: {
+        side: {
+            top: 'bottom-full mb-2',
+            bottom: 'top-full mt-2',
+        },
+        align: {
+            start: 'left-0',
+            center: 'left-1/2 -translate-x-1/2',
+            end: 'right-0',
+        },
+    },
+    defaultVariant: { side: 'bottom', align: 'center' },
+) -%}
+
+<div
+    class="{{ ['relative inline-block', class|default('')]|tailwind_merge }}"
+    x-data="{ show: false, timer: null }"
+    @mouseenter="timer = setTimeout(() => show = true, 300)"
+    @mouseleave="clearTimeout(timer); show = false"
+    {{ html_attrs() }}
+>
+    {% block trigger %}{% endblock %}
+    <div
+        x-show="show"
+        x-cloak
+        x-transition
+        class="{{ panel.apply({side: side|default(null), align: align|default(null)})|tailwind_merge }}"
+    >
+        {% block body %}{% endblock %}
+    </div>
+</div>

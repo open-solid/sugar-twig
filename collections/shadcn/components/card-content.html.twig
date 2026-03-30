@@ -1,0 +1,14 @@
+{#
+    Card Content component - shadcn/ui port
+
+    Usage:
+        <CardContent>
+            <p>Your content here.</p>
+        </CardContent>
+
+    Parameters:
+        class - Additional CSS classes
+#}
+<div data-slot="card-content" class="{{ ['px-4 group-data-[size=sm]/card:px-3', class|default('')]|tailwind_merge }}" {{ html_attrs() }}>
+    {%- block content %}{% endblock -%}
+</div>

@@ -1,0 +1,29 @@
+{#
+    Empty state component - shadcn/ui port
+
+    Usage:
+        <Empty title="No results found" description="Try adjusting your search or filters." />
+
+        {# With action button #}
+        <Empty title="No properties" description="Get started by creating a new property.">
+            <Button content="Add Property" />
+        </Empty>
+
+    Parameters:
+        icon        - SVG icon HTML
+        title       - Title text
+        description - Description text
+        class       - Additional CSS classes
+#}
+<div class="flex flex-col items-center justify-center gap-4 py-12 text-center {{ class|default('') }}" {{ html_attrs(exclude=['title']) }}>
+    {%- if icon is defined -%}
+    <div class="text-muted-foreground">{{ icon|raw }}</div>
+    {%- endif -%}
+    {%- if title is defined -%}
+    <h3 class="text-lg font-semibold">{{ title }}</h3>
+    {%- endif -%}
+    {%- if description is defined -%}
+    <p class="text-sm text-muted-foreground max-w-sm">{{ description }}</p>
+    {%- endif -%}
+    {%- block content %}{% endblock -%}
+</div>

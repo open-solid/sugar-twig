@@ -1,0 +1,72 @@
+{#
+    Select component (custom styled) - shadcn/ui port (Alpine.js)
+
+    Usage:
+        <Select name="resort" placeholder="Select a resort..." options="{{ [
+            { value: 'gf', label: 'Grand Floridian' },
+            { value: 'blt', label: 'Bay Lake Tower' },
+            { value: 'bwv', label: 'BoardWalk Villas' },
+        ] }}" />
+
+        {# With pre-selected value #}
+        <Select name="resort" value="blt" options="{{ [
+            { value: 'gf', label: 'Grand Floridian' },
+            { value: 'blt', label: 'Bay Lake Tower' },
+        ] }}" />
+
+    Parameters:
+        name        - Input name
+        placeholder - Placeholder text (default: 'Select...')
+        options     - Array of {value, label}
+        value       - Initially selected value
+        class       - Additional CSS classes
+#}
+{%- set placeholder = placeholder|default('Select...') -%}
+
+<div
+    class="relative {{ class|default('') }}"
+    x-data="{
+        open: false,
+        selected: '{{ value|default('') }}',
+        label: '{{ value is defined ? (options|filter(o => o.value == value)|first).label|default('') : '' }}'
+    }"
+    {{ html_attrs(exclude=['name', 'placeholder', 'value']) }}
+>
+    {%- if name is defined -%}
+    <input type="hidden" name="{{ name }}" :value="selected" />
+    {%- endif -%}
+
+    {# Trigger #}
+    <button
+        type="button"
+        @click="open = !open"
+        class="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+    >
+        <span :class="selected ? '' : 'text-muted-foreground'" x-text="selected ? label : '{{ placeholder }}'"></span>
+        <svg class="size-4 opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+
+    {# Dropdown #}
+    <div
+        x-show="open"
+        x-cloak
+        x-transition
+        @click.outside="open = false"
+        @keydown.escape.window="open = false"
+        class="absolute z-50 mt-1 w-full min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md"
+    >
+        {%- for option in options|default([]) -%}
+        <div
+            @click="selected = '{{ option.value }}'; label = '{{ option.label }}'; open = false"
+            :class="selected === '{{ option.value }}' ? 'bg-accent text-accent-foreground' : ''"
+            class="relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
+            role="option"
+        >
+            <span x-show="selected === '{{ option.value }}'" class="absolute right-2 flex size-3.5 items-center justify-center">
+                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            {{ option.label }}
+        </div>
+        {%- endfor -%}
+    </div>
+</div>

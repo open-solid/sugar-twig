@@ -1,0 +1,27 @@
+{#
+    Scroll Area component - shadcn/ui port
+
+    Usage:
+        <ScrollArea class="h-72 w-48 rounded-md border">
+            <div class="p-4">Long content here...</div>
+        </ScrollArea>
+
+    Parameters:
+        orientation - vertical|horizontal|both (default: 'vertical')
+        class       - Additional CSS classes
+#}
+{%- set component = html_cva(
+    base: 'relative',
+    variants: {
+        orientation: {
+            vertical: 'overflow-y-auto overflow-x-hidden',
+            horizontal: 'overflow-x-auto overflow-y-hidden',
+            both: 'overflow-auto',
+        },
+    },
+    defaultVariant: { orientation: 'vertical' },
+) -%}
+
+<div class="{{ component.apply({orientation: orientation|default(null)}, class|default(null))|tailwind_merge }}" {{ html_attrs() }}>
+    {%- block content %}{% endblock -%}
+</div>

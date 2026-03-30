@@ -1,0 +1,55 @@
+{#
+    Pagination component - shadcn/ui port
+
+    Usage:
+        <Pagination current="3" total="10" href="/properties?page={page}" />
+
+    Parameters:
+        current  - Current page number
+        total    - Total number of pages
+        href     - URL pattern with {page} placeholder (e.g. '/items?page={page}')
+        class    - Additional CSS classes
+#}
+{%- set current = current|default(1) -%}
+{%- set total = total|default(1) -%}
+
+<nav role="navigation" aria-label="pagination" class="mx-auto flex w-full justify-center {{ class|default('') }}" {{ html_attrs(exclude=['href']) }}>
+    <ul class="flex flex-row items-center gap-1">
+        {# Previous #}
+        <li>
+            <a
+                {% if current > 1 %}href="{{ href|replace({'{page}': current - 1}) }}"{% endif %}
+                class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 px-3 py-2 {{ current <= 1 ? 'pointer-events-none opacity-50' : '' }}"
+                aria-label="Go to previous page"
+            >
+                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                <span>Previous</span>
+            </a>
+        </li>
+
+        {# Page numbers #}
+        {%- for page in 1..total -%}
+        <li>
+            <a
+                href="{{ href|replace({'{page}': page}) }}"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground size-9 {{ page == current ? 'border border-input bg-background shadow-xs' : '' }}"
+                aria-current="{{ page == current ? 'page' : 'false' }}"
+            >
+                {{ page }}
+            </a>
+        </li>
+        {%- endfor -%}
+
+        {# Next #}
+        <li>
+            <a
+                {% if current < total %}href="{{ href|replace({'{page}': current + 1}) }}"{% endif %}
+                class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 px-3 py-2 {{ current >= total ? 'pointer-events-none opacity-50' : '' }}"
+                aria-label="Go to next page"
+            >
+                <span>Next</span>
+                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+        </li>
+    </ul>
+</nav>

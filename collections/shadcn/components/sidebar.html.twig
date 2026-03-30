@@ -1,0 +1,61 @@
+{#
+    Sidebar component (simplified) - shadcn/ui port (Alpine.js)
+
+    Usage:
+        <Sidebar>
+            <BlockHeader><span class="font-semibold">DVC Marketplace</span></BlockHeader>
+            <BlockContent>
+                <SidebarSection title="Menu">
+                    <SidebarItem href="/" content="Dashboard" active />
+                    <SidebarItem href="/properties" content="Properties" />
+                    <SidebarItem href="/listings" content="Listings" />
+                </SidebarSection>
+            </BlockContent>
+            <BlockFooter><span class="text-xs text-muted-foreground">v1.0.0</span></BlockFooter>
+        </Sidebar>
+
+    Parameters:
+        side  - left|right (default: 'left')
+        open  - Initial open state (default: true)
+        class - Additional CSS classes
+#}
+{%- set side = side|default('left') -%}
+{%- set open = open|default(true) -%}
+
+<div
+    x-data="{ open: {{ open ? 'true' : 'false' }} }"
+    class="flex {{ class|default('') }}"
+    {{ html_attrs(exclude=['open']) }}
+>
+    {# Sidebar panel #}
+    <aside
+        :class="open ? 'w-64' : 'w-0'"
+        class="relative flex h-full shrink-0 flex-col overflow-hidden border-{{ side == 'left' ? 'r' : 'l' }} bg-sidebar text-sidebar-foreground transition-[width] duration-200 {{ side == 'right' ? 'order-last' : '' }}"
+    >
+        <div class="flex h-full w-64 flex-col">
+            {# Header #}
+            <div class="flex items-center border-b px-4 py-2">
+                {% block header %}{% endblock %}
+            </div>
+
+            {# Content #}
+            <div class="flex-1 overflow-y-auto px-3 py-2">
+                {% block content %}{% endblock %}
+            </div>
+
+            {# Footer #}
+            <div class="border-t px-4 py-2">
+                {% block footer %}{% endblock %}
+            </div>
+        </div>
+    </aside>
+
+    {# Toggle button #}
+    <button
+        @click="open = !open"
+        class="absolute {{ side == 'left' ? 'left-64' : 'right-64' }} top-3 z-10 -ml-3 flex size-6 items-center justify-center rounded-md border bg-background shadow-xs transition-all"
+        :class="open ? '' : '{{ side == 'left' ? 'left-0 ml-3' : 'right-0 mr-3' }}'"
+    >
+        <svg class="size-4" :class="open ? '' : 'rotate-180'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+</div>

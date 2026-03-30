@@ -1,0 +1,21 @@
+{#
+    Sidebar Section component - shadcn/ui port
+
+    Usage:
+        <SidebarSection title="Navigation">
+            <SidebarItem href="/" content="Home" />
+            <SidebarItem href="/about" content="About" />
+        </SidebarSection>
+
+    Parameters:
+        title - Section title
+        class - Additional CSS classes
+#}
+<div class="py-2 {{ class|default('') }}">
+    {%- if title is defined -%}
+    <h4 class="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/50">{{ title }}</h4>
+    {%- endif -%}
+    <div class="space-y-1">
+        {% block content %}{% endblock %}
+    </div>
+</div>

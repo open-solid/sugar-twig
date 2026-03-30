@@ -1,0 +1,13 @@
+{#
+    Dropdown Menu Label - shadcn/ui port
+
+    Usage:
+        <DropdownMenuLabel content="My Account" />
+
+    Parameters:
+        content - Label text
+        class   - Additional CSS classes
+#}
+<div class="px-2 py-1.5 text-sm font-semibold {{ class|default('') }}">
+    {{- content|default('')|raw -}}
+</div>

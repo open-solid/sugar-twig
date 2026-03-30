@@ -1,0 +1,34 @@
+{#
+    Card Header component - shadcn/ui port
+
+    Usage:
+        <CardHeader>
+            <BlockTitle>Create project</BlockTitle>
+            <BlockDescription>Deploy your new project in one-click.</BlockDescription>
+        </CardHeader>
+
+        <CardHeader>
+            <BlockTitle>Settings</BlockTitle>
+            <BlockAction><button>Edit</button></BlockAction>
+        </CardHeader>
+
+    Parameters:
+        class - Additional CSS classes
+
+    Blocks:
+        title       - Card title content
+        description - Card description content
+        action      - Action element(s) displayed inline-end
+#}
+<div data-slot="card-header" class="{{ ['group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-4 group-data-[size=sm]/card:px-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-4 group-data-[size=sm]/card:[.border-b]:pb-3', class|default('')]|tailwind_merge }}" {{ html_attrs() }}>
+    {%- if block('title') is not empty -%}
+    <div data-slot="card-title" class="cn-font-heading text-base leading-snug font-medium group-data-[size=sm]/card:text-sm">{% block title %}{% endblock %}</div>
+    {%- endif -%}
+    {%- if block('description') is not empty -%}
+    <div data-slot="card-description" class="text-sm text-muted-foreground">{% block description %}{% endblock %}</div>
+    {%- endif -%}
+    {%- if block('action') is not empty -%}
+    <div data-slot="card-action">{% block action %}{% endblock %}</div>
+    {%- endif -%}
+    {%- block content %}{% endblock -%}
+</div>

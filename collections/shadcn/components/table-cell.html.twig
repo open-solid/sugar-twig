@@ -1,0 +1,14 @@
+{#
+    Table Cell component - shadcn/ui port
+
+    Usage:
+        <TableCell content="$250.00" />
+        <TableCell content="Paid" class="font-medium" />
+
+    Parameters:
+        content - Cell content
+        class   - Additional CSS classes
+#}
+<td class="p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] {{ class|default('') }}" {{ html_attrs(exclude=['content']) }}>
+    {{- content|default('')|raw -}}
+</td>

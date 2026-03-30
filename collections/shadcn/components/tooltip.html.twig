@@ -1,0 +1,47 @@
+{#
+    Tooltip component - shadcn/ui port (Alpine.js)
+
+    Usage:
+        <Tooltip text="Add to library">
+            <BlockTrigger>
+                <Button variant="outline" content="Hover me" />
+            </BlockTrigger>
+        </Tooltip>
+
+    Parameters:
+        text  - Tooltip text
+        side  - top|bottom|left|right (default: 'top')
+        class - Additional CSS classes
+#}
+{%- set tooltip = html_cva(
+    base: 'absolute z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground animate-in',
+    variants: {
+        side: {
+            top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
+            bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
+            left: 'right-full top-1/2 -translate-y-1/2 mr-2',
+            right: 'left-full top-1/2 -translate-y-1/2 ml-2',
+        },
+    },
+    defaultVariant: { side: 'top' },
+) -%}
+
+<div class="{{ ['relative inline-block', class|default('')]|tailwind_merge }}" x-data="{ show: false }" {{ html_attrs() }}>
+    <div @mouseenter="show = true" @mouseleave="show = false" @focus="show = true" @blur="show = false">
+        {% block trigger %}{% endblock %}
+    </div>
+    <div
+        x-show="show"
+        x-cloak
+        x-transition:enter="transition ease-out duration-150"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-100"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        role="tooltip"
+        class="{{ tooltip.apply({side: side|default(null)})|tailwind_merge }}"
+    >
+        {{ text }}
+    </div>
+</div>

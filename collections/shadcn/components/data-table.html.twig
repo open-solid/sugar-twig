@@ -1,0 +1,68 @@
+{#
+    Data Table component (simplified) - shadcn/ui port
+    Styled table wrapper with header sorting indicators.
+
+    Usage:
+        <DataTable columns="{{ [
+            { key: 'name', label: 'Resort Name', sortable: true },
+            { key: 'points', label: 'Points', sortable: true },
+            { key: 'status', label: 'Status' },
+        ] }}" rows="{{ [
+            { name: 'Grand Floridian', points: '150', status: 'Active' },
+            { name: 'Bay Lake Tower', points: '200', status: 'Pending' },
+        ] }}" sort="name" order="asc" href="/properties?sort={sort}&order={order}" />
+
+    Parameters:
+        columns - Array of {key, label, sortable?}
+        rows    - Array of row data objects
+        sort    - Current sort column key
+        order   - asc|desc (default: 'asc')
+        href    - URL pattern with {sort} and {order} placeholders for sorting links
+        empty   - Empty state message (default: 'No results.')
+        class   - Additional CSS classes
+#}
+{%- set sort = sort|default('') -%}
+{%- set order = order|default('asc') -%}
+{%- set empty_message = empty|default('No results.') -%}
+
+<div class="rounded-md border {{ class|default('') }}" {{ html_attrs(exclude=['href', 'rows']) }}>
+    <div class="relative w-full overflow-auto">
+        <table class="w-full caption-bottom text-sm">
+            <thead class="[&_tr]:border-b">
+                <tr class="border-b transition-colors hover:bg-muted/50">
+                    {%- for col in columns|default([]) -%}
+                    <th class="h-10 px-2 text-left align-middle font-medium text-muted-foreground">
+                        {%- if col.sortable|default(false) and href is defined -%}
+                        <a href="{{ href|replace({'{sort}': col.key, '{order}': (sort == col.key and order == 'asc') ? 'desc' : 'asc'}) }}" class="inline-flex items-center gap-1 hover:text-foreground">
+                            {{ col.label }}
+                            {%- if sort == col.key -%}
+                            <svg class="size-4 {{ order == 'desc' ? 'rotate-180' : '' }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                            {%- endif -%}
+                        </a>
+                        {%- else -%}
+                        {{ col.label }}
+                        {%- endif -%}
+                    </th>
+                    {%- endfor -%}
+                </tr>
+            </thead>
+            <tbody class="[&_tr:last-child]:border-0">
+                {%- if rows|default([])|length > 0 -%}
+                    {%- for row in rows -%}
+                    <tr class="border-b transition-colors hover:bg-muted/50">
+                        {%- for col in columns -%}
+                        <td class="p-2 align-middle">{{ row[col.key]|default('')|raw }}</td>
+                        {%- endfor -%}
+                    </tr>
+                    {%- endfor -%}
+                {%- else -%}
+                <tr>
+                    <td colspan="{{ columns|length }}" class="h-24 text-center text-muted-foreground">
+                        {{ empty_message }}
+                    </td>
+                </tr>
+                {%- endif -%}
+            </tbody>
+        </table>
+    </div>
+</div>

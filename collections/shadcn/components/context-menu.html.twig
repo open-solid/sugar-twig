@@ -1,0 +1,44 @@
+{#
+    Context Menu component (simplified) - shadcn/ui port (Alpine.js)
+
+    Usage:
+        <ContextMenu>
+            <BlockTrigger>
+                <div class="flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm">Right click here</div>
+            </BlockTrigger>
+            <BlockBody>
+                <DropdownMenuItem content="Cut" />
+                <DropdownMenuItem content="Copy" />
+                <DropdownMenuItem content="Paste" />
+            </BlockBody>
+        </ContextMenu>
+
+    Parameters:
+        class - Additional CSS classes
+#}
+<div
+    class="relative {{ class|default('') }}"
+    x-data="{ open: false, x: 0, y: 0 }"
+    @contextmenu.prevent="open = true; x = $event.offsetX; y = $event.offsetY"
+    @click.outside="open = false"
+    @keydown.escape.window="open = false"
+    {{ html_attrs() }}
+>
+    {% block trigger %}{% endblock %}
+    <div
+        x-show="open"
+        x-cloak
+        x-transition:enter="transition ease-out duration-100"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-75"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        :style="`left: ${x}px; top: ${y}px`"
+        class="absolute z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md"
+        role="menu"
+        @click="open = false"
+    >
+        {% block body %}{% endblock %}
+    </div>
+</div>

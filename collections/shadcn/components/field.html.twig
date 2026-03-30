@@ -1,0 +1,35 @@
+{#
+    Field component - shadcn/ui port
+    Wraps label + input + description + error message.
+
+    Usage:
+        <Field id="email" label="Email" description="We will never share your email.">
+            <Input id="email" name="email" type="email" placeholder="you@example.com" />
+        </Field>
+
+        {# With error #}
+        <Field id="name" label="Name" error="Name is required.">
+            <Input id="name" name="name" />
+        </Field>
+
+    Parameters:
+        label       - Label text
+        description - Description/help text
+        error       - Error message
+        id          - Field id (links label to input)
+        class       - Additional CSS classes
+#}
+<div class="space-y-2 {{ class|default('') }}" {{ html_attrs(exclude=['id', 'label']) }}>
+    {%- if label is defined -%}
+    <label{% if id is defined %} for="{{ id }}"{% endif %} class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+        {{ label }}
+    </label>
+    {%- endif -%}
+    {%- block content %}{% endblock -%}
+    {%- if description is defined and error is not defined -%}
+    <p class="text-[0.8rem] text-muted-foreground">{{ description }}</p>
+    {%- endif -%}
+    {%- if error is defined -%}
+    <p class="text-[0.8rem] font-medium text-destructive">{{ error }}</p>
+    {%- endif -%}
+</div>

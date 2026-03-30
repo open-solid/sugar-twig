@@ -1,0 +1,54 @@
+{#
+    Popover component - shadcn/ui port (Alpine.js)
+
+    Usage:
+        <Popover>
+            <BlockTrigger>
+                <Button variant="outline" content="Open popover" />
+            </BlockTrigger>
+            <BlockBody>
+                <div class="grid gap-4">
+                    <h4 class="font-medium leading-none">Dimensions</h4>
+                    <p class="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
+                </div>
+            </BlockBody>
+        </Popover>
+
+    Parameters:
+        side  - top|bottom|left|right (default: 'bottom')
+        align - start|center|end (default: 'center')
+        class - Additional CSS classes
+#}
+{%- set panel = html_cva(
+    base: 'absolute z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none',
+    variants: {
+        side: {
+            top: 'bottom-full mb-2',
+            bottom: 'top-full mt-2',
+            left: 'right-full mr-2',
+            right: 'left-full ml-2',
+        },
+        align: {
+            start: 'left-0',
+            center: 'left-1/2 -translate-x-1/2',
+            end: 'right-0',
+        },
+    },
+    defaultVariant: { side: 'bottom', align: 'center' },
+) -%}
+
+<div class="{{ ['relative inline-block', class|default('')]|tailwind_merge }}" x-data="{ open: false }" {{ html_attrs() }}>
+    <div @click="open = !open">
+        {% block trigger %}{% endblock %}
+    </div>
+    <div
+        x-show="open"
+        x-cloak
+        x-transition
+        @click.outside="open = false"
+        @keydown.escape.window="open = false"
+        class="{{ panel.apply({side: side|default(null), align: align|default(null)})|tailwind_merge }}"
+    >
+        {% block body %}{% endblock %}
+    </div>
+</div>

@@ -1,0 +1,15 @@
+{#
+    Card Footer component - shadcn/ui port
+
+    Usage:
+        <CardFooter>
+            <Button variant="outline" content="Cancel" />
+            <Button content="Submit" />
+        </CardFooter>
+
+    Parameters:
+        class - Additional CSS classes
+#}
+<div data-slot="card-footer" class="{{ ['flex items-center rounded-b-xl border-t bg-muted/50 p-4 group-data-[size=sm]/card:p-3', class|default('')]|tailwind_merge }}" {{ html_attrs() }}>
+    {%- block content %}{% endblock -%}
+</div>

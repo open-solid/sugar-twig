@@ -1,0 +1,23 @@
+{#
+    Textarea component - shadcn/ui port
+
+    Usage:
+        <Textarea placeholder="Type your message here." name="message" />
+        <Textarea rows="5" value="Pre-filled text" />
+
+    Parameters:
+        placeholder - Placeholder text
+        name        - Textarea name
+        id          - Textarea id
+        value       - Textarea value
+        rows        - Number of rows
+        class       - Additional CSS classes
+#}
+<textarea
+    {% if name is defined %}name="{{ name }}"{% endif %}
+    {% if id is defined %}id="{{ id }}"{% endif %}
+    {% if placeholder is defined %}placeholder="{{ placeholder }}"{% endif %}
+    {% if rows is defined %}rows="{{ rows }}"{% endif %}
+    class="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 {{ class|default('') }}"
+    {{ html_attrs(exclude=['id', 'name', 'placeholder', 'rows', 'value']) }}
+>{{ value|default('') }}</textarea>

@@ -1,0 +1,55 @@
+{#
+    Dropdown Menu component - shadcn/ui port (Alpine.js)
+
+    Usage:
+        <DropdownMenu>
+            <BlockTrigger>
+                <Button variant="outline" content="Open" />
+            </BlockTrigger>
+            <BlockBody>
+                <DropdownMenuLabel content="My Account" />
+                <DropdownMenuSeparator />
+                <DropdownMenuItem content="Profile" />
+                <DropdownMenuItem content="Settings" />
+                <DropdownMenuSeparator />
+                <DropdownMenuItem content="Log out" variant="destructive" />
+            </BlockBody>
+        </DropdownMenu>
+
+    Parameters:
+        align - start|center|end (default: 'start')
+        class - Additional CSS classes
+#}
+{%- set panel = html_cva(
+    base: 'absolute z-50 mt-1 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md',
+    variants: {
+        align: {
+            start: 'left-0',
+            center: 'left-1/2 -translate-x-1/2',
+            end: 'right-0',
+        },
+    },
+    defaultVariant: { align: 'start' },
+) -%}
+
+<div class="{{ ['relative inline-block', class|default('')]|tailwind_merge }}" x-data="{ open: false }" {{ html_attrs() }}>
+    <div @click="open = !open">
+        {% block trigger %}{% endblock %}
+    </div>
+    <div
+        x-show="open"
+        x-cloak
+        x-transition:enter="transition ease-out duration-100"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-75"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        @click.outside="open = false"
+        @keydown.escape.window="open = false"
+        class="{{ panel.apply({align: align|default(null)})|tailwind_merge }}"
+        role="menu"
+    >
+        {% block body %}{% endblock %}
+    </div>
+</div>

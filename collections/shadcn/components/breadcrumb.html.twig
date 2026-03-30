@@ -1,0 +1,37 @@
+{#
+    Breadcrumb component - shadcn/ui port
+
+    Usage:
+        <Breadcrumb items="{{ [
+            { label: 'Home', href: '/' },
+            { label: 'Properties', href: '/properties' },
+            { label: 'Grand Floridian', current: true },
+        ] }}" />
+
+    Parameters:
+        items     - Array of {label, href?, current?}
+        separator - Separator HTML (default: chevron SVG)
+        class     - Additional CSS classes
+#}
+{%- set separator = separator|default('<svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>') -%}
+
+<nav aria-label="breadcrumb" class="{{ class|default('') }}" {{ html_attrs() }}>
+    <ol class="flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5">
+        {%- for item in items|default([]) -%}
+        {%- if not loop.first -%}
+        <li role="presentation" aria-hidden="true" class="[&>svg]:size-3.5">
+            {{ separator|raw }}
+        </li>
+        {%- endif -%}
+        <li class="inline-flex items-center gap-1.5">
+            {%- if item.current|default(false) -%}
+            <span role="link" aria-disabled="true" aria-current="page" class="font-normal text-foreground">{{ item.label }}</span>
+            {%- elseif item.href is defined -%}
+            <a href="{{ item.href }}" class="transition-colors hover:text-foreground">{{ item.label }}</a>
+            {%- else -%}
+            <span>{{ item.label }}</span>
+            {%- endif -%}
+        </li>
+        {%- endfor -%}
+    </ol>
+</nav>

@@ -1,0 +1,99 @@
+{#
+    Sheet component - shadcn/ui port (Alpine.js)
+    Slide-in panel from any edge.
+
+    Usage:
+        <Sheet side="right" title="Edit profile" description="Make changes here.">
+            <BlockTrigger>
+                <Button variant="outline" content="Open Sheet" />
+            </BlockTrigger>
+            <BlockBody>
+                <form>...</form>
+            </BlockBody>
+            <BlockFooter>
+                <Button content="Save changes" />
+            </BlockFooter>
+        </Sheet>
+
+    Parameters:
+        side        - top|right|bottom|left (default: 'right')
+        title       - Sheet title
+        description - Sheet description
+        open        - Initial open state (default: false)
+        class       - Additional CSS classes
+#}
+{%- set open = open|default(false) -%}
+
+{%- set content = html_cva(
+    base: 'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out duration-300',
+    variants: {
+        side: {
+            top: 'inset-x-0 top-0 border-b',
+            bottom: 'inset-x-0 bottom-0 border-t',
+            left: 'inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm',
+            right: 'inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm',
+        },
+    },
+    defaultVariant: { side: 'right' },
+) -%}
+
+{%- set _enters = {
+    top: '-translate-y-full',
+    bottom: 'translate-y-full',
+    left: '-translate-x-full',
+    right: 'translate-x-full',
+} -%}
+
+<div x-data="{ open: {{ open ? 'true' : 'false' }} }" {{ html_attrs(exclude=['open', 'title']) }}>
+    {# Trigger #}
+    <div @click="open = true">{% block trigger %}{% endblock %}</div>
+
+    {# Panel #}
+    <template x-teleport="body">
+        <div x-show="open" x-cloak class="fixed inset-0 z-50">
+            {# Overlay #}
+            <div class="fixed inset-0 bg-black/80" x-show="open" x-transition.opacity @click="open = false"></div>
+
+            {# Content #}
+            <div
+                class="{{ content.apply({side: side|default(null)}, class|default(null))|tailwind_merge }}"
+                x-show="open"
+                x-transition:enter="transition ease-in-out duration-300"
+                x-transition:enter-start="{{ _enters[side|default('right')] }}"
+                x-transition:enter-end="translate-x-0 translate-y-0"
+                x-transition:leave="transition ease-in-out duration-300"
+                x-transition:leave-start="translate-x-0 translate-y-0"
+                x-transition:leave-end="{{ _enters[side|default('right')] }}"
+                @keydown.escape.window="open = false"
+                x-trap.noscroll="open"
+            >
+                {# Header #}
+                {%- if title is defined or description is defined -%}
+                <div class="flex flex-col space-y-2 text-center sm:text-left">
+                    {%- if title is defined -%}
+                    <h2 class="text-lg font-semibold text-foreground">{{ title }}</h2>
+                    {%- endif -%}
+                    {%- if description is defined -%}
+                    <p class="text-sm text-muted-foreground">{{ description }}</p>
+                    {%- endif -%}
+                </div>
+                {%- endif -%}
+
+                {# Body #}
+                <div class="py-4">{% block body %}{% endblock %}</div>
+
+                {# Footer #}
+                {% block footer %}{% endblock %}
+
+                {# Close button #}
+                <button
+                    @click="open = false"
+                    class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                >
+                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+        </div>
+    </template>
+</div>

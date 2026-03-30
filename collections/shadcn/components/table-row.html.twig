@@ -1,0 +1,15 @@
+{#
+    Table Row component - shadcn/ui port
+
+    Usage:
+        <TableRow>
+            <TableCell content="INV001" />
+            <TableCell content="$250.00" />
+        </TableRow>
+
+    Parameters:
+        class - Additional CSS classes
+#}
+<tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted {{ class|default('') }}" {{ html_attrs() }}>
+    {%- block content %}{% endblock -%}
+</tr>

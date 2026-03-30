@@ -6,6 +6,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=8.4",
+        "symfony/console": "^8.0",
         "twig/html-extra": "^2.16|^3.24"
     },
     "require-dev": {

@@ -1,0 +1,27 @@
+{#
+    Table component - shadcn/ui port
+
+    Usage:
+        <Table>
+            <thead>
+                <tr class="border-b">
+                    <TableHeader content="Name" />
+                    <TableHeader content="Status" />
+                </tr>
+            </thead>
+            <tbody>
+                <TableRow>
+                    <TableCell content="Grand Floridian" />
+                    <TableCell content="Active" />
+                </TableRow>
+            </tbody>
+        </Table>
+
+    Parameters:
+        class - Additional CSS classes
+#}
+<div class="relative w-full overflow-auto">
+    <table class="w-full caption-bottom text-sm {{ class|default('') }}" {{ html_attrs() }}>
+        {%- block content %}{% endblock -%}
+    </table>
+</div>

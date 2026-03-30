@@ -1,0 +1,64 @@
+{#
+    Alert component - shadcn/ui port
+
+    Usage:
+        <Alert>
+            <BlockTitle>Heads up!</BlockTitle>
+            <BlockDescription>You can add components to your app using the CLI.</BlockDescription>
+        </Alert>
+
+        <Alert variant="destructive">
+            <BlockIcon><svg>...</svg></BlockIcon>
+            <BlockTitle>Error</BlockTitle>
+            <BlockDescription>Your session has expired.</BlockDescription>
+            <BlockAction>
+                <Button size="sm">Retry</Button>
+            </BlockAction>
+        </Alert>
+
+    Parameters:
+        variant     - default|destructive (default: 'default')
+        class       - Additional CSS classes
+
+    Blocks:
+        icon        - SVG icon markup
+        title       - Alert title content
+        description - Alert description content
+        action      - Action button(s) displayed top-right
+#}
+{%- set alert = html_cva(
+    base: 'group/alert relative grid w-full gap-0.5 rounded-lg border px-2.5 py-2 text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*=\'size-\'])]:size-4',
+    variants: {
+        variant: {
+            default: 'bg-card text-card-foreground',
+            destructive: 'border-destructive/50 text-destructive *:data-[slot=alert-description]:text-destructive/90',
+        },
+    },
+    defaultVariant: {
+        variant: 'default',
+    },
+) -%}
+
+<div data-slot="alert" role="alert" class="{{ alert.apply({variant: variant|default(null)}, class|default(null))|tailwind_merge }}" {{ html_attrs() }}>
+    {%- if block('icon') is not empty -%}
+        {%- block icon %}{% endblock -%}
+    {%- endif -%}
+
+    {%- if block('title') is not empty -%}
+        <div data-slot="alert-title" class="cn-font-heading font-medium group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground">
+            {%- block title %}{% endblock -%}
+        </div>
+    {%- endif -%}
+
+    {%- if block('description') is not empty -%}
+        <div data-slot="alert-description" class="text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4">
+            {%- block description %}{% endblock -%}
+        </div>
+    {%- endif -%}
+
+    {%- if block('action') is not empty -%}
+        <div data-slot="alert-action" class="absolute top-2 right-2">
+            {%- block action %}{% endblock -%}
+        </div>
+    {%- endif -%}
+</div>

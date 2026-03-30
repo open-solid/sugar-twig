@@ -1,0 +1,20 @@
+{#
+    Button Group component - shadcn/ui port
+
+    Usage:
+        <ButtonGroup>
+            <Button variant="outline" content="Left" class="rounded-r-none" />
+            <Button variant="outline" content="Center" class="rounded-none" />
+            <Button variant="outline" content="Right" class="rounded-l-none" />
+        </ButtonGroup>
+
+    Parameters:
+        class - Additional CSS classes
+#}
+<div role="group"
+     data-slot="button-group"
+     class="flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-lg [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-lg! {{ class|default('') }}"
+     {{ html_attrs() }}
+>
+    {%- block content %}{% endblock -%}
+</div>

@@ -1,0 +1,45 @@
+{#
+    Accordion component - shadcn/ui port (Alpine.js)
+
+    Usage:
+        <Accordion items="{{ [
+            { value: 'item-1', trigger: 'Is it accessible?', content: 'Yes. It adheres to the WAI-ARIA design pattern.' },
+            { value: 'item-2', trigger: 'Is it styled?', content: 'Yes. It comes with default styles that match shadcn/ui.' },
+            { value: 'item-3', trigger: 'Is it animated?', content: 'Yes. It uses Alpine.js collapse for smooth animations.' },
+        ] }}" />
+
+    Parameters:
+        items - Array of {value, trigger, content}
+        type  - single|multiple (default: 'single')
+        class - Additional CSS classes
+#}
+{%- set type = type|default('single') -%}
+
+<div
+    x-data="{ active: {% if type == 'single' %}''{% else %}[]{% endif %} }"
+    class="divide-y divide-border {{ class|default('') }}"
+    {{ html_attrs(exclude=['type']) }}
+>
+    {%- for item in items|default([]) -%}
+    <div class="border-b">
+        <h3 class="flex">
+            <button
+                type="button"
+                @click="{% if type == 'single' %}active = active === '{{ item.value }}' ? '' : '{{ item.value }}'{% else %}active.includes('{{ item.value }}') ? active = active.filter(v => v !== '{{ item.value }}') : active.push('{{ item.value }}'){% endif %}"
+                :aria-expanded="{% if type == 'single' %}active === '{{ item.value }}'{% else %}active.includes('{{ item.value }}'){% endif %}"
+                class="flex flex-1 items-center justify-between py-4 text-sm font-medium transition-all hover:underline [&[aria-expanded=true]>svg]:rotate-180"
+            >
+                {{ item.trigger }}
+                <svg class="size-4 shrink-0 text-muted-foreground transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+        </h3>
+        <div
+            x-show="{% if type == 'single' %}active === '{{ item.value }}'{% else %}active.includes('{{ item.value }}'){% endif %}"
+            x-collapse
+            x-cloak
+        >
+            <div class="pb-4 pt-0 text-sm">{{ item.content|raw }}</div>
+        </div>
+    </div>
+    {%- endfor -%}
+</div>

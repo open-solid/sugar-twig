@@ -1,0 +1,59 @@
+{#
+    Menubar component (simplified) - shadcn/ui port (Alpine.js)
+
+    Usage:
+        {% set file_menu %}
+            <DropdownMenuItem content="New Tab" />
+            <DropdownMenuItem content="New Window" />
+            <DropdownMenuSeparator />
+            <DropdownMenuItem content="Print" />
+        {% endset %}
+        {% set edit_menu %}
+            <DropdownMenuItem content="Undo" />
+            <DropdownMenuItem content="Redo" />
+        {% endset %}
+        <Menubar items="{{ [
+            { label: 'File', content: file_menu },
+            { label: 'Edit', content: edit_menu },
+        ] }}" />
+
+    Parameters:
+        items   - Array of {label, content} where content is dropdown HTML
+        class   - Additional CSS classes
+#}
+<div
+    class="flex h-9 items-center space-x-1 rounded-md border bg-background p-1 shadow-xs {{ class|default('') }}"
+    x-data="{ active: null }"
+    @click.outside="active = null"
+    role="menubar"
+    {{ html_attrs() }}
+>
+    {%- for item in items|default([]) -%}
+    <div class="relative">
+        <button
+            type="button"
+            @click="active = active === {{ loop.index0 }} ? null : {{ loop.index0 }}"
+            @mouseenter="active !== null ? active = {{ loop.index0 }} : null"
+            :class="active === {{ loop.index0 }} ? 'bg-accent text-accent-foreground' : ''"
+            class="flex cursor-pointer select-none items-center rounded-sm px-3 py-1 text-sm font-medium outline-none hover:bg-accent hover:text-accent-foreground"
+            role="menuitem"
+        >
+            {{ item.label }}
+        </button>
+        <div
+            x-show="active === {{ loop.index0 }}"
+            x-cloak
+            x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            class="absolute left-0 top-full z-50 mt-1 min-w-[12rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg"
+            role="menu"
+        >
+            {{ item.content|raw }}
+        </div>
+    </div>
+    {%- endfor -%}
+</div>

@@ -1,0 +1,49 @@
+{#
+    Navigation Menu component (simplified) - shadcn/ui port (Alpine.js)
+
+    Usage:
+        <NavigationMenu items="{{ [
+            { label: 'Getting Started', content: '<ul class=\"grid gap-3 w-[400px]\"><li><a href=\"/docs\">Introduction</a></li></ul>' },
+            { label: 'Components', content: '<ul class=\"grid gap-3 w-[400px]\"><li><a href=\"/docs/alert\">Alert</a></li></ul>' },
+            { label: 'Documentation', href: '/docs' },
+        ] }}" />
+
+    Parameters:
+        items - Array of {label, href?, content?}
+               If href: renders as link. If content: renders dropdown.
+        class - Additional CSS classes
+#}
+<nav class="relative {{ class|default('') }}" x-data="{ active: null }" @click.outside="active = null" {{ html_attrs() }}>
+    <ul class="group flex flex-1 list-none items-center justify-center space-x-1">
+        {%- for item in items|default([]) -%}
+        <li class="relative">
+            {%- if item.href is defined -%}
+            <a
+                href="{{ item.href }}"
+                class="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none"
+            >
+                {{ item.label }}
+            </a>
+            {%- else -%}
+            <button
+                type="button"
+                @click="active = active === {{ loop.index0 }} ? null : {{ loop.index0 }}"
+                :class="active === {{ loop.index0 }} ? 'bg-accent text-accent-foreground' : ''"
+                class="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none"
+            >
+                {{ item.label }}
+                <svg class="relative ml-1 size-3 transition-transform duration-200" :class="active === {{ loop.index0 }} ? 'rotate-180' : ''" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div
+                x-show="active === {{ loop.index0 }}"
+                x-cloak
+                x-transition
+                class="absolute left-0 top-full z-50 mt-1.5 w-auto min-w-[12rem] rounded-md border bg-popover p-4 text-popover-foreground shadow-lg"
+            >
+                {{ item.content|raw }}
+            </div>
+            {%- endif -%}
+        </li>
+        {%- endfor -%}
+    </ul>
+</nav>

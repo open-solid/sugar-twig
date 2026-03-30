@@ -1,0 +1,41 @@
+{#
+    Switch component - shadcn/ui port (Alpine.js)
+
+    Usage:
+        <Switch id="airplane" name="airplane_mode" label="Airplane Mode" />
+        <Switch id="notifications" label="Enable notifications" checked />
+
+    Parameters:
+        id      - Switch id
+        name    - Input name
+        checked - Initial state (default: false)
+        label   - Label text
+        class   - Additional CSS classes
+#}
+{%- set checked = checked|default(false) -%}
+
+<div class="flex items-center space-x-2" x-data="{ on: {{ checked ? 'true' : 'false' }} }">
+    <button
+        type="button"
+        role="switch"
+        :aria-checked="on"
+        @click="on = !on"
+        {% if id is defined %}id="{{ id }}"{% endif %}
+        :class="on ? 'bg-primary' : 'bg-input'"
+        class="peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 {{ class|default('') }}"
+        {{ html_attrs(exclude=['checked', 'id', 'label', 'name']) }}
+    >
+        <span
+            :class="on ? 'translate-x-4' : 'translate-x-0'"
+            class="pointer-events-none block size-4 rounded-full bg-background shadow-lg ring-0 transition-transform"
+        ></span>
+    </button>
+    {%- if name is defined -%}
+    <input type="hidden" name="{{ name }}" :value="on ? '1' : '0'" />
+    {%- endif -%}
+    {%- if label is defined -%}
+    <label{% if id is defined %} for="{{ id }}"{% endif %} class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+        {{ label }}
+    </label>
+    {%- endif -%}
+</div>

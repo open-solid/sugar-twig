@@ -1,0 +1,88 @@
+{#
+    Alert Dialog component - shadcn/ui port (Alpine.js)
+    Unlike Dialog, clicking the overlay does NOT close it.
+
+    Usage:
+        <AlertDialog title="Are you absolutely sure?" description="This action cannot be undone. This will permanently delete your account." cancel="Cancel" confirm="Yes, delete account">
+            <BlockTrigger>
+                <Button variant="destructive" content="Delete Account" />
+            </BlockTrigger>
+            <BlockBody>Optional extra content between description and buttons</BlockBody>
+        </AlertDialog>
+
+    Parameters:
+        title       - Dialog title
+        description - Dialog description
+        cancel      - Cancel button text (default: 'Cancel')
+        confirm     - Confirm button text (default: 'Continue')
+        action      - Form action URL or JS handler for confirm
+        class       - Additional CSS classes
+#}
+{%- set cancel = cancel|default('Cancel') -%}
+{%- set confirm = confirm|default('Continue') -%}
+
+<div x-data="{ open: false }" {{ html_attrs(exclude=['action', 'title']) }}>
+    {# Trigger #}
+    <div @click="open = true">{% block trigger %}{% endblock %}</div>
+
+    {# Modal #}
+    <template x-teleport="body">
+        <div x-show="open" x-cloak class="fixed inset-0 z-50">
+            {# Overlay - no click dismiss #}
+            <div data-slot="alert-dialog-overlay"
+                 role="presentation"
+                 class="fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
+                 x-show="open"
+                 x-transition.opacity
+            ></div>
+
+            {# Content #}
+            <div
+                role="alertdialog"
+                aria-modal="true"
+                size="sm"
+                data-slot="alert-dialog-content"
+                {% if title is defined %}aria-labelledby="alert-dialog-title"{% endif %}
+                {% if description is defined %}aria-describedby="alert-dialog-description"{% endif %}
+                class="group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm {{ class|default('') }}"
+                x-show="open"
+                x-transition:enter="ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="ease-in duration-200"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                x-trap.noscroll="open"
+            >
+                {# Header #}
+                <div data-slot="alert-dialog-header"
+                     size="default"
+                     class="grid grid-rows-[auto_1fr] gap-1.5 has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] has-data-[slot=alert-dialog-media]:gap-x-4 sm:group-data-[size=default]/alert-dialog-content:place-items-start sm:group-data-[size=default]/alert-dialog-content:text-left sm:group-data-[size=default]/alert-dialog-content:has-data-[slot=alert-dialog-media]:grid-rows-[auto_1fr]"
+                >
+                    {%- if title is defined -%}
+                    <h2 data-slot="alert-dialog-title" id="alert-dialog-title" class="cn-font-heading text-base font-medium sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2">
+                        {{ title }}
+                    </h2>
+                    {%- endif -%}
+                    {%- if description is defined -%}
+                    <p data-slot="alert-dialog-description" id="alert-dialog-description" class="text-sm text-balance text-muted-foreground md:text-pretty *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground">
+                        {{ description }}
+                    </p>
+                    {%- endif -%}
+                </div>
+
+                {# Body #}
+                {% block body %}{% endblock %}
+
+                {# Footer #}
+                <div data-slot="alert-dialog-footer" class="-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end">
+                    {% block footer %}
+                        <Button variant="outline" size="sm" @click="open = false">{{ cancel }}</Button>
+                        {%- if action is defined %}{% set formaction = action %}{% endif -%}
+                        <Button size="sm" @click="open = false">{{ confirm }}</Button>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </template>
+</div>

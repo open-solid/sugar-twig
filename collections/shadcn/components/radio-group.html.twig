@@ -1,0 +1,33 @@
+{#
+    Radio Group component - shadcn/ui port
+
+    Usage:
+        <RadioGroup name="plan" items="{{ [
+            { value: 'free', label: 'Free' },
+            { value: 'pro', label: 'Pro', checked: true },
+            { value: 'enterprise', label: 'Enterprise' },
+        ] }}" />
+
+    Parameters:
+        name    - Radio group name
+        items   - Array of {value, label, id?, checked?}
+        class   - Additional CSS classes
+#}
+<div role="radiogroup" class="grid gap-2 {{ class|default('') }}" {{ html_attrs(exclude=['name']) }}>
+    {%- for item in items|default([]) -%}
+    {%- set item_id = item.id|default(name ~ '_' ~ item.value) -%}
+    <div class="flex items-center space-x-2">
+        <input
+            type="radio"
+            id="{{ item_id }}"
+            name="{{ name }}"
+            value="{{ item.value }}"
+            {% if item.checked|default(false) %}checked{% endif %}
+            class="peer size-4 shrink-0 rounded-full border border-primary shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 accent-primary"
+        />
+        <label for="{{ item_id }}" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            {{ item.label }}
+        </label>
+    </div>
+    {%- endfor -%}
+</div>

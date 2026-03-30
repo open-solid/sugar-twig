@@ -1,0 +1,31 @@
+{#
+    Badge component - shadcn/ui port
+
+    Usage:
+        <Badge content="New" />
+        <Badge variant="destructive" content="Expired" />
+        <Badge variant="outline" content="Draft" />
+
+    Parameters:
+        variant - default|secondary|destructive|outline (default: 'default')
+        content - Badge text
+        class   - Additional CSS classes
+#}
+{%- set badge = html_cva(
+    base: 'inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+    variants: {
+        variant: {
+            default: 'border-transparent bg-primary text-primary-foreground shadow-xs hover:bg-primary/80',
+            secondary: 'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
+            destructive: 'border-transparent bg-destructive text-white shadow-xs hover:bg-destructive/80',
+            outline: 'text-foreground',
+        },
+    },
+    defaultVariant: {
+        variant: 'default',
+    },
+) -%}
+
+<span class="{{ badge.apply({variant: variant|default(null)}, class|default(null))|tailwind_merge }}" {{ html_attrs(exclude=['content']) }}>
+    {{- content|default('')|raw -}}
+</span>
