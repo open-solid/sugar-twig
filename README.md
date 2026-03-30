@@ -1,6 +1,6 @@
 # Twig Component
 
-JSX-like syntax for Twig.
+A Symfony bundle that brings JSX-like component syntax to Twig.
 
 ## Example
 
@@ -18,6 +18,8 @@ Use it:
 <Button type="submit">Save</Button>
 ```
 
+It compiles to native Twig `embed`/`include` calls at load time — zero runtime overhead, no custom tags to learn.
+
 Output:
 
 ```twig
@@ -28,21 +30,14 @@ Output:
 
 ## Benchmark
 
-The benchmark test at tests/Preprocessor/ComponentPreprocessorBenchmarkTest.php covers 4 tiers:
+The benchmark test at `tests/Preprocessor/ComponentPreprocessorBenchmarkTest.php` covers four tiers:
 
-┌─────────┬────────────┬──────────────┬────────────────────────────────────────────────────────────────────┐
-│  Tier   │   Time     │   Memory     │                           What it tests                            │
-│         │   budget   │    budget    │                                                                    │
-├─────────┼────────────┼──────────────┼────────────────────────────────────────────────────────────────────┤
-│ no-op   │ < 5 µs     │ < 1 KB       │ Fast-path exit (plain HTML, no components)                         │
-├─────────┼────────────┼──────────────┼────────────────────────────────────────────────────────────────────┤
-│ simple  │ < 50 µs    │ < 8 KB       │ 3 flat self-closing components                                     │
-├─────────┼────────────┼──────────────┼────────────────────────────────────────────────────────────────────┤
-│ medium  │ < 160 µs   │ < 32 KB      │ Dialog with compound blocks + nested Field/Input                   │
-├─────────┼────────────┼──────────────┼────────────────────────────────────────────────────────────────────┤
-│ complex │ < 750 µs   │ < 64 KB      │ Full page: nav, cards, dialog, table (~40 components, 3 nesting    │
-│         │            │              │ levels)                                                            │
-└─────────┴────────────┴──────────────┴────────────────────────────────────────────────────────────────────┘
+| Tier    | Time budget | Memory budget | What it tests                                                           |
+|---------|-------------|---------------|-------------------------------------------------------------------------|
+| no-op   | < 5 µs      | < 1 KB        | Fast-path exit (plain HTML, no components)                              |
+| simple  | < 50 µs     | < 8 KB        | 3 flat self-closing components                                          |
+| medium  | < 160 µs    | < 32 KB       | Dialog with compound blocks + nested Field/Input                        |
+| complex | < 750 µs    | < 64 KB       | Full page: nav, cards, dialog, table (~40 components, 3 nesting levels) |
 
 Each tier runs 1000 iterations for time and 100 for memory, with warmup passes. If a future change introduces a
 regression (e.g., O(n²) parsing), the complex tier will blow past 750 µs and fail.
