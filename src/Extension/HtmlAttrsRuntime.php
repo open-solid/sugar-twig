@@ -36,13 +36,10 @@ final readonly class HtmlAttrsRuntime implements RuntimeExtensionInterface
         $excluded = [] === $exclude ? self::TWIG_INTERNALS : self::TWIG_INTERNALS + array_flip($exclude);
 
         if (isset($context['className'])) {
-            if (isset($defaults['class'])) {
-                $context['class'] = $defaults['class'].' '.$context['className'];
-                if ($this->tailwindRuntime) {
-                    $context['class'] = $this->tailwindRuntime->merge($context['class']);
-                }
-            } else {
-                $defaults['class'] = $context['className'];
+            $context['class'] = isset($defaults['class']) ? $defaults['class'].' '.$context['className'] : $context['className'];
+
+            if ($this->tailwindRuntime) {
+                $context['class'] = $this->tailwindRuntime->merge($context['class']);
             }
 
             unset($context['className']);
