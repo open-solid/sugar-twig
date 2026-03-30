@@ -30,8 +30,8 @@ final readonly class InstallCommand
 
     public function __invoke(SymfonyStyle $io, #[Argument] string $name, #[Argument] string $targetDir = 'templates'): int
     {
-        $io->comment('Fetching registry...');
         [$collection, $element] = explode('/', $name);
+        $io->comment(\sprintf('Fetching %s registry...', $collection));
         $registryUrl = sprintf(self::COLLECTION_URL, $collection);
 
         $registry = json_decode(file_get_contents($registryUrl), true);
