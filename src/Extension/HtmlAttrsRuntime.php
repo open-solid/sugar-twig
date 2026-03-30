@@ -22,44 +22,6 @@ final readonly class HtmlAttrsRuntime implements RuntimeExtensionInterface
     private const array TWIG_INTERNALS = ['_parent' => true, '_seq' => true, '_key' => true, '_iterated' => true, '_charset' => true];
 
     /**
-     * Standard HTML attributes allowed to pass through.
-     * `class` is intentionally excluded — components handle it via tailwind_merge.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes
-     */
-    private const array HTML_ATTRIBUTES = [
-        // Global attributes
-        'accesskey' => true, 'autocapitalize' => true, 'autofocus' => true, 'contenteditable' => true,
-        'dir' => true, 'draggable' => true, 'enterkeyhint' => true, 'hidden' => true, 'id' => true, 'inert' => true,
-        'inputmode' => true, 'is' => true, 'itemid' => true, 'itemprop' => true, 'itemref' => true, 'itemscope' => true,
-        'itemtype' => true, 'lang' => true, 'nonce' => true, 'part' => true, 'popover' => true, 'popovertarget' => true,
-        'popovertargetaction' => true, 'role' => true, 'slot' => true, 'spellcheck' => true, 'style' => true,
-        'tabindex' => true, 'title' => true, 'translate' => true, 'virtualkeyboardpolicy' => true, 'class' => true,
-        // Link and navigation
-        'download' => true, 'href' => true, 'hreflang' => true, 'ping' => true, 'referrerpolicy' => true, 'rel' => true, 'target' => true,
-        // Embedded content
-        'alt' => true, 'coords' => true, 'crossorigin' => true, 'decoding' => true, 'fetchpriority' => true, 'height' => true,
-        'ismap' => true, 'loading' => true, 'sizes' => true, 'src' => true, 'srcset' => true, 'usemap' => true, 'width' => true,
-        // Media
-        'autoplay' => true, 'controls' => true, 'loop' => true, 'muted' => true, 'playsinline' => true, 'poster' => true, 'preload' => true,
-        // Table
-        'colspan' => true, 'headers' => true, 'rowspan' => true, 'scope' => true, 'span' => true,
-        // Form
-        'accept' => true, 'action' => true, 'autocomplete' => true, 'capture' => true, 'checked' => true, 'cols' => true,
-        'dirname' => true, 'disabled' => true, 'enctype' => true, 'for' => true, 'form' => true, 'formaction' => true,
-        'formenctype' => true, 'formmethod' => true, 'formnovalidate' => true, 'formtarget' => true, 'high' => true,
-        'label' => true, 'list' => true, 'low' => true, 'max' => true, 'maxlength' => true, 'method' => true, 'min' => true,
-        'minlength' => true, 'multiple' => true, 'name' => true, 'novalidate' => true, 'open' => true, 'optimum' => true,
-        'pattern' => true, 'placeholder' => true, 'readonly' => true, 'required' => true, 'rows' => true, 'selected' => true,
-        'size' => true, 'step' => true, 'type' => true, 'value' => true, 'wrap' => true,
-        // Meta/script/style
-        'charset' => true, 'content' => true, 'http-equiv' => true, 'media' => true,
-        // Other
-        'cite' => true, 'datetime' => true, 'default' => true, 'kind' => true, 'reversed' => true, 'sandbox' => true,
-        'shape' => true, 'srcdoc' => true, 'srclang' => true, 'start' => true,
-    ];
-
-    /**
      * Filters the template context to pass through only recognized HTML attributes,
      * merges with defaults, and delegates to HtmlExtension::htmlAttr() for safe rendering.
      *
@@ -92,27 +54,9 @@ final readonly class HtmlAttrsRuntime implements RuntimeExtensionInterface
                 continue;
             }
 
-            if (self::isHtmlAttribute($key)) {
-                $attrs[$key] = $value;
-            }
+            $attrs[$key] = $value;
         }
 
         return HtmlExtension::htmlAttr($env, $attrs);
-    }
-
-    private static function isHtmlAttribute(string $name): bool
-    {
-        if (isset(self::HTML_ATTRIBUTES[$name])) {
-            return true;
-        }
-
-        return match ($name[0] ?? '') {
-            'a' => str_starts_with($name, 'aria-'),
-            'd' => str_starts_with($name, 'data-'),
-            'o' => str_starts_with($name, 'on'),
-            'x' => str_starts_with($name, 'x-'),
-            '@', ':' => true,
-            default => false,
-        };
     }
 }

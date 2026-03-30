@@ -39,25 +39,16 @@ final class HtmlAttrsRuntimeTest extends TestCase
     #[Test]
     public function it_renders_standard_html_attributes(): void
     {
-        $context = ['id' => 'main', 'role' => 'alert', 'class' => 'text-red-500', 'variant' => 'destructive'];
+        $context = ['id' => 'main', 'role' => 'alert', 'class' => 'text-red-500'];
         $result = $this->runtime->render($this->env, $context);
 
         self::assertSame('id="main" role="alert" class="text-red-500"', $result);
     }
 
     #[Test]
-    public function it_filters_out_non_html_attributes(): void
-    {
-        $context = ['variant' => 'destructive', 'items' => [], 'separator' => '/', 'id' => 'main'];
-        $result = $this->runtime->render($this->env, $context);
-
-        self::assertSame('id="main"', $result);
-    }
-
-    #[Test]
     public function it_allows_aria_prefixed_attributes(): void
     {
-        $context = ['aria-label' => 'Close', 'aria-hidden' => 'true', 'variant' => 'sm'];
+        $context = ['aria-label' => 'Close', 'aria-hidden' => 'true'];
         $result = $this->runtime->render($this->env, $context);
 
         self::assertSame('aria-label="Close" aria-hidden="true"', $result);
@@ -66,7 +57,7 @@ final class HtmlAttrsRuntimeTest extends TestCase
     #[Test]
     public function it_allows_data_prefixed_attributes(): void
     {
-        $context = ['data-slot' => 'trigger', 'data-state' => 'open', 'variant' => 'sm'];
+        $context = ['data-slot' => 'trigger', 'data-state' => 'open'];
         $result = $this->runtime->render($this->env, $context);
 
         self::assertSame('data-slot="trigger" data-state="open"', $result);
@@ -75,7 +66,7 @@ final class HtmlAttrsRuntimeTest extends TestCase
     #[Test]
     public function it_allows_alpine_directives(): void
     {
-        $context = ['x-data' => '{ open: false }', 'x-show' => 'open', '@click' => 'open = !open', ':class' => "open ? 'active' : ''", 'variant' => 'default'];
+        $context = ['x-data' => '{ open: false }', 'x-show' => 'open', '@click' => 'open = !open', ':class' => "open ? 'active' : ''"];
         $result = $this->runtime->render($this->env, $context);
 
         self::assertSame('x-data="{ open: false }" x-show="open" @click="open = !open" :class="open ? &#039;active&#039; : &#039;&#039;"', $result);
@@ -102,7 +93,7 @@ final class HtmlAttrsRuntimeTest extends TestCase
     #[Test]
     public function it_returns_empty_string_when_no_html_attributes(): void
     {
-        $context = ['variant' => 'destructive', 'items' => [], '_parent' => []];
+        $context = ['_parent' => []];
         $result = $this->runtime->render($this->env, $context);
 
         self::assertSame('', $result);
@@ -208,7 +199,6 @@ final class HtmlAttrsRuntimeTest extends TestCase
         });
 
         $result = $env->render('test.html.twig', [
-            'variant' => 'destructive',
             'title' => 'Error',
             'id' => 'main',
             'aria-live' => 'polite',
