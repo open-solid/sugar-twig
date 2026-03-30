@@ -36,6 +36,7 @@ final readonly class InstallCommand
     {
         $registries = [];
         $installed = [];
+        $failed = false;
 
         foreach ($names as $name) {
             $parts = explode('/', $name);
@@ -65,14 +66,20 @@ final readonly class InstallCommand
             foreach ($registry['namespace'][$element] as $path) {
                 $fileUrl = $registry['path'].$path;
                 $targetFile = $this->projectDir.DIRECTORY_SEPARATOR.$targetDir.DIRECTORY_SEPARATOR.$path;
-                $this->filesystem->copy($fileUrl, $targetFile, true);
-                $installed[] = $targetFile;
-                $io->writeln(sprintf("\r\033[2K %s", $path));
+                try {
+                    $this->filesystem->copy($fileUrl, $targetFile, true);
+                    $installed[] = $targetFile;
+                    $io->writeln(sprintf("\r\033[2K \xe2\x9c\x94 %s", $path));
+                } catch (\Throwable) {
+                    $failed = true;
+                    $io->writeln(sprintf("\r\033[2K \xe2\x9c\x98 %s", $path));
+                }
             }
         }
 
-        $io->writeln(sprintf(' Installed %d element%s.', \count($installed), \count($installed) > 1 ? 's' : ''));
+        $count = \count($installed);
+        $io->writeln(sprintf(' Installed %d element%s.', $count, $count > 1 ? 's' : ''));
 
-        return 0;
+        return $failed ? 1 : 0;
     }
 }
