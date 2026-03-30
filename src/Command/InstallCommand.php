@@ -32,7 +32,7 @@ final readonly class InstallCommand
     /**
      * @param list<string> $names
      */
-    public function __invoke(SymfonyStyle $io, #[Argument] array $names, #[Argument] string $targetDir = 'templates'): int
+    public function __invoke(SymfonyStyle $io, #[Argument] array $names, #[Option] string $targetDir = 'templates'): int
     {
         $registries = [];
         $installed = [];
