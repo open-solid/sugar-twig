@@ -48,7 +48,7 @@ final readonly class InstallCommand
             [$collection, $element] = $parts;
 
             if (!isset($registries[$collection])) {
-                $io->write(sprintf("\r\033[2KFetching %s registry...", $collection));
+                $io->write(sprintf("\r\033[2KInstalling %s...", $name));
                 $registryUrl = sprintf($this->collectionUrl, $collection);
                 $registries[$collection] = json_decode(file_get_contents($registryUrl), true);
             }
@@ -67,11 +67,11 @@ final readonly class InstallCommand
                 $targetFile = $this->projectDir.DIRECTORY_SEPARATOR.$targetDir.DIRECTORY_SEPARATOR.$path;
                 $this->filesystem->copy($fileUrl, $targetFile, true);
                 $installed[] = $targetFile;
+                $io->writeln(sprintf("\r\033[2K %s", $path));
             }
         }
 
-        $io->write("\r\033[2K");
-        $io->success(sprintf('Installed to:%s', "\n - ".implode("\n - ", $installed)));
+        $io->writeln(sprintf(' Installed %d element%s.', \count($installed), \count($installed) > 1 ? 's' : ''));
 
         return 0;
     }
