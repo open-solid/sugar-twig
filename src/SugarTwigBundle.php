@@ -12,13 +12,4 @@ class SugarTwigBundle extends AbstractBundle
     {
         $container->import('../config/services.php');
     }
-
-    public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
-    {
-        $builder->prependExtensionConfig('twig', [
-            'paths' => [
-                $this->getPath().'/templates' => '',
-            ],
-        ]);
-    }
 }
