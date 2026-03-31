@@ -3,14 +3,14 @@
 
     Usage:
         {% set file_menu %}
-            <DropdownMenuItem content="New Tab" />
-            <DropdownMenuItem content="New Window" />
+            <DropdownMenuItem>New Tab</DropdownMenuItem>
+            <DropdownMenuItem>New Window</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem content="Print" />
+            <DropdownMenuItem>Print</DropdownMenuItem>
         {% endset %}
         {% set edit_menu %}
-            <DropdownMenuItem content="Undo" />
-            <DropdownMenuItem content="Redo" />
+            <DropdownMenuItem>Undo</DropdownMenuItem>
+            <DropdownMenuItem>Redo</DropdownMenuItem>
         {% endset %}
         <Menubar items="{{ [
             { label: 'File', content: file_menu },

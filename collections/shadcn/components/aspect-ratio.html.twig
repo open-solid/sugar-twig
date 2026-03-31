@@ -2,18 +2,21 @@
     Aspect Ratio component - shadcn/ui port
 
     Usage:
-        <AspectRatio ratio="{{ 16/9 }}" content='<img src="/photo.jpg" class="object-cover w-full h-full" />' />
-        <AspectRatio ratio="1" content='<img src="/avatar.jpg" class="object-cover w-full h-full rounded" />' />
+        <AspectRatio ratio="{{ 16/9 }}">
+            <img src="/photo.jpg" class="object-cover w-full h-full" />
+        </AspectRatio>
+        <AspectRatio ratio="1">
+            <img src="/avatar.jpg" class="object-cover w-full h-full rounded" />
+        </AspectRatio>
 
     Parameters:
-        ratio   - Aspect ratio value (default: 16/9)
-        content - Inner HTML content
+        ratio     - Aspect ratio value (default: 16/9)
         className - Additional CSS classes
 #}
 {%- set ratio = ratio|default(16/9) -%}
 
-<div style="padding-bottom: {{ (1 / ratio * 100)|round(4) }}%;" {{ html_attrs({class: 'relative w-full'}, exclude=['content', 'ratio']) }}>
+<div style="padding-bottom: {{ (1 / ratio * 100)|round(4) }}%;" {{ html_attrs({class: 'relative w-full'}, exclude=['ratio']) }}>
     <div class="absolute inset-0">
-        {{- content|default('')|raw -}}
+        {%- block content %}{% endblock -%}
     </div>
 </div>

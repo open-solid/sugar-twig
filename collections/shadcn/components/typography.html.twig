@@ -2,14 +2,13 @@
     Typography component - shadcn/ui port
 
     Usage:
-        <Typography as="h1" content="Page Title" />
-        <Typography as="p" content="Body text paragraph." />
-        <Typography as="muted" content="Secondary info" />
-        <Typography as="code" content="npm install" />
+        <Typography as="h1">Page Title</Typography>
+        <Typography as="p">Body text paragraph.</Typography>
+        <Typography as="muted">Secondary info</Typography>
+        <Typography as="code">npm install</Typography>
 
     Parameters:
         as        - h1|h2|h3|h4|p|blockquote|lead|large|small|muted|code (default: 'p')
-        content   - Text content
         className - Additional CSS classes
 #}
 
@@ -47,6 +46,6 @@
     code: 'code',
 } -%}
 
-<{{ _tags[as|default('p')] }} {{ html_attrs({class: component.apply({as: as|default(null)})}, exclude=['as', 'content']) }}>
-    {{- content|default('')|raw -}}
+<{{ _tags[as|default('p')] }} {{ html_attrs({class: component.apply({as: as|default(null)})}, exclude=['as']) }}>
+    {%- block content %}{% endblock -%}
 </{{ _tags[as|default('p')] }}>

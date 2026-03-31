@@ -2,13 +2,12 @@
     Table Cell component - shadcn/ui port
 
     Usage:
-        <TableCell content="$250.00" />
-        <TableCell content="Paid" class="font-medium" />
+        <TableCell>$250.00</TableCell>
+        <TableCell className="font-medium">Paid</TableCell>
 
     Parameters:
-        content - Cell content
         className - Additional CSS classes
 #}
-<td {{ html_attrs({class: 'p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]'}, exclude=['content']) }}>
-    {{- content|default('')|raw -}}
+<td {{ html_attrs({class: 'p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]'}) }}>
+    {%- block content %}{% endblock -%}
 </td>

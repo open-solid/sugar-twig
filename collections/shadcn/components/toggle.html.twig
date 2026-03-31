@@ -2,14 +2,13 @@
     Toggle component - shadcn/ui port (Alpine.js)
 
     Usage:
-        <Toggle content="<b>B</b>" aria-label="Toggle bold" />
-        <Toggle variant="outline" content="Italic" />
+        <Toggle aria-label="Toggle bold"><b>B</b></Toggle>
+        <Toggle variant="outline">Italic</Toggle>
 
     Parameters:
         variant   - default|outline (default: 'default')
         size      - default|sm|lg (default: 'default')
         pressed   - Initial pressed state (default: false)
-        content   - Toggle label/icon
         className - Additional CSS classes
 #}
 {%- set pressed = pressed|default(false) -%}
@@ -36,7 +35,7 @@
     @click="pressed = !pressed"
     :aria-pressed="pressed"
     :class="pressed ? 'bg-accent text-accent-foreground' : ''"
-    {{ html_attrs({class: component.apply({variant: variant|default(null), size: size|default(null)})}, exclude=['content', 'pressed', 'size', 'variant']) }}
+    {{ html_attrs({class: component.apply({variant: variant|default(null), size: size|default(null)})}, exclude=['pressed', 'size', 'variant']) }}
 >
-    {{- content|default('')|raw -}}
+    {%- block content %}{% endblock -%}
 </button>

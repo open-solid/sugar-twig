@@ -2,12 +2,11 @@
     Table Header Cell component - shadcn/ui port
 
     Usage:
-        <TableHeader content="Name" />
+        <TableHeader>Name</TableHeader>
 
     Parameters:
-        content - Header cell text
         className - Additional CSS classes
 #}
-<th {{ html_attrs({class: 'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]'}, exclude=['content']) }}>
-    {{- content|default('')|raw -}}
+<th {{ html_attrs({class: 'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]'}) }}>
+    {%- block content %}{% endblock -%}
 </th>

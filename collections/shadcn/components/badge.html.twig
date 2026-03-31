@@ -2,13 +2,12 @@
     Badge component - shadcn/ui port
 
     Usage:
-        <Badge content="New" />
-        <Badge variant="destructive" content="Expired" />
-        <Badge variant="outline" content="Draft" />
+        <Badge>New</Badge>
+        <Badge variant="destructive">Expired</Badge>
+        <Badge variant="outline">Draft</Badge>
 
     Parameters:
         variant   - default|secondary|destructive|outline (default: 'default')
-        content   - Badge text
         className - Additional CSS classes
 #}
 {%- set badge = html_cva(
@@ -26,6 +25,6 @@
     },
 ) -%}
 
-<span {{ html_attrs({class: badge.apply({variant: variant|default(null)})}, exclude=['content', 'variant']) }}>
-    {{- content|default('')|raw -}}
+<span {{ html_attrs({class: badge.apply({variant: variant|default(null)})}, exclude=['variant']) }}>
+    {%- block content %}{% endblock -%}
 </span>

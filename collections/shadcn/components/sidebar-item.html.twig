@@ -2,13 +2,12 @@
     Sidebar Item component - shadcn/ui port
 
     Usage:
-        <SidebarItem href="/dashboard" content="Dashboard" active />
-        <SidebarItem href="/settings" content="Settings" />
+        <SidebarItem href="/dashboard" active>Dashboard</SidebarItem>
+        <SidebarItem href="/settings">Settings</SidebarItem>
 
     Parameters:
         href      - Link URL
         icon      - Icon SVG HTML
-        content   - Item label
         active    - Whether currently active (default: false)
         className - Additional CSS classes
 #}
@@ -27,10 +26,10 @@
 
 <a
     {% if href is defined %}href="{{ href }}"{% endif %}
-    {{ html_attrs({class: component.apply({active: active ? 'true' : 'false'})}, exclude=['active', 'content', 'href']) }}
+    {{ html_attrs({class: component.apply({active: active ? 'true' : 'false'})}, exclude=['active', 'href', 'icon']) }}
 >
     {%- if icon is defined -%}
     <span class="size-4 shrink-0">{{ icon|raw }}</span>
     {%- endif -%}
-    {{- content|default('')|raw -}}
+    {%- block content %}{% endblock -%}
 </a>

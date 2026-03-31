@@ -2,12 +2,11 @@
     Dropdown Menu Item component - shadcn/ui port
 
     Usage:
-        <DropdownMenuItem content="Profile" />
-        <DropdownMenuItem content="Settings" href="/settings" />
-        <DropdownMenuItem content="Delete" variant="destructive" />
+        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem href="/settings">Settings</DropdownMenuItem>
+        <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
 
     Parameters:
-        content   - Item label
         href      - Optional link URL
         variant   - default|destructive (default: 'default')
         disabled  - Whether disabled
@@ -31,7 +30,7 @@
 <{{ as }}
     {% if href is defined %}href="{{ href }}"{% endif %}
     role="menuitem"
-    {{ html_attrs({class: menuItem.apply({variant: variant|default(null)}) ~ (disabled|default(false) ? ' pointer-events-none opacity-50' : '')}, exclude=['content', 'disabled', 'href', 'variant']) }}
+    {{ html_attrs({class: menuItem.apply({variant: variant|default(null)}) ~ (disabled|default(false) ? ' pointer-events-none opacity-50' : '')}, exclude=['disabled', 'href', 'variant']) }}
 >
-    {{- content|default('')|raw -}}
+    {%- block content %}{% endblock -%}
 </{{ as }}>
