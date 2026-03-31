@@ -15,14 +15,14 @@
         </Dialog>
 
     Parameters:
+        open        - Initial open state (default: false)
         title       - Dialog title
         description - Dialog description
-        open        - Initial open state (default: false)
         className   - Additional CSS classes on the content panel
 #}
 {%- set open = open|default(false) -%}
 
-<div x-data="{ open: {{ open ? 'true' : 'false' }} }" {{ html_attrs(exclude=['open', 'title']) }}>
+<div x-data="{ open: {{ open ? 'true' : 'false' }} }" {{ html_attrs(exclude=['open', 'title', 'description']) }}>
     {# Trigger #}
     <div @click="open = true">{% block trigger %}{% endblock %}</div>
 
