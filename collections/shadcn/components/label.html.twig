@@ -1,13 +1,12 @@
 {#
-    Label component - shadcn/ui port
+Label component - shadcn/ui port
 
-    Usage:
-        <Label for="email">Email</Label>
+Usage:
+    <Label for="email">Email</Label>
 
-    Parameters:
-        for       - ID of the associated form element
-        className - Additional CSS classes
+Parameters:
+    className - Additional CSS classes
 #}
-<label{% if for is defined %} for="{{ for }}"{% endif %} {{ html_attrs({class: 'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'}, exclude=['for']) }}>
+<label data-slot="field-label" {{ html_attrs({class: 'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'}) }}>
     {%- block content %}{% endblock -%}
 </label>
